@@ -940,6 +940,7 @@
             document.addEventListener('touchend', handleDragEnd);
 
             document.addEventListener('keydown', handleKeydown);
+            document.addEventListener('wheel', handleWheel, { passive: true });
 
             galleryPage.addEventListener('contextmenu', e => e.preventDefault());
 
@@ -1099,6 +1100,125 @@
                     projectInfo.classList.remove('transitioning');
                     positionProjectInfo();
                 }, 200);
+            }
+        }
+
+        let lastWheelTime = 0;
+        let wheelAccumulatorX = 0;
+        let wheelAccumulatorY = 0;
+
+        // Cooldowns
+        const MOUSE_WHEEL_COOLDOWN = 50;   // Fast for discrete clicks
+        const TRACKPAD_COOLDOWN = 500;     // Slow for inertial streams
+        let currentCooldown = TRACKPAD_COOLDOWN;
+
+        function handleWheel(e) {
+            if (!document.getElementById('page-gallery').classList.contains('active')) return;
+
+            const now = Date.now();
+
+            // Normalize delta (convert lines to pixels if needed)
+            // deltaMode: 0 = pixels, 1 = lines, 2 = pages
+            let dx = e.deltaX;
+            let dy = e.deltaY;
+
+            if (e.deltaMode === 1) { // Lines
+                dx *= 40;
+                dy *= 40;
+            } else if (e.deltaMode === 2) { // Pages
+                dx *= 800;
+                dy *= 800;
+            }
+
+            // Detect input type heuristic
+            // Mouse wheels usually send larger discrete steps or deltaMode=1
+            // Trackpads send streams of small floats
+            const isMouseWheel = e.deltaMode === 1 || (Math.abs(dx) > 50 || Math.abs(dy) > 50);
+
+            if (isMouseWheel) {
+                currentCooldown = MOUSE_WHEEL_COOLDOWN;
+                // For mouse wheel, we don't accumulate, we take the raw impulse usually
+                // But let's use the same logic flow
+                wheelAccumulatorX += dx;
+                wheelAccumulatorY += dy;
+            } else {
+                currentCooldown = TRACKPAD_COOLDOWN;
+                wheelAccumulatorX += dx;
+                wheelAccumulatorY += dy;
+            }
+
+            if (now - lastWheelTime < currentCooldown) {
+                // If it's a mouse wheel, strictly block. 
+                // If trackpad, we might be in the tail, also block.
+                // Reset accumulators if we are blocking to prevent burst later?
+                // Actually, for trackpad, we want to ignore the tail.
+                // For mouse wheel, we want to allow rapid clicks but not faster than cooldown.
+                return;
+            }
+
+            // Threshold checking
+            const threshold = 30; // Min pixels to trigger nav
+
+            let actionTaken = false;
+            let projectChanged = false;
+
+            const project = projects[currentProjectIndex];
+            const imageIndex = currentImageIndices[currentProjectIndex];
+
+            // Horizontal
+            if (Math.abs(wheelAccumulatorX) > Math.abs(wheelAccumulatorY)) {
+                if (Math.abs(wheelAccumulatorX) > threshold) {
+                    if (wheelAccumulatorX > 0 && imageIndex < project.images.length - 1) {
+                        currentImageIndices[currentProjectIndex]++;
+                        actionTaken = true;
+                    } else if (wheelAccumulatorX < 0 && imageIndex > 0) {
+                        currentImageIndices[currentProjectIndex]--;
+                        actionTaken = true;
+                    }
+                    wheelAccumulatorX = 0; // Reset after action
+                    wheelAccumulatorY = 0;
+                }
+            }
+            // Vertical
+            else {
+                if (Math.abs(wheelAccumulatorY) > threshold) {
+                    if (wheelAccumulatorY > 0 && currentProjectIndex < projects.length - 1) {
+                        currentProjectIndex++;
+                        projectChanged = true;
+                        actionTaken = true;
+                    } else if (wheelAccumulatorY < 0 && currentProjectIndex > 0) {
+                        currentProjectIndex--;
+                        projectChanged = true;
+                        actionTaken = true;
+                    }
+                    wheelAccumulatorX = 0;
+                    wheelAccumulatorY = 0;
+                }
+            }
+
+            if (actionTaken) {
+                lastWheelTime = now;
+                updatePositions(true);
+                updateGalleryHash();
+
+                if (projectChanged) {
+                    projectInfo.classList.add('transitioning');
+                    setTimeout(() => {
+                        updateProjectInfo();
+                        projectInfo.classList.remove('transitioning');
+                        positionProjectInfo();
+                    }, 200);
+                } else {
+                    positionProjectInfo();
+                }
+            } else {
+                // If no action taken (below threshold), decay accumulators or keep them?
+                // For trackpad, we might want to keep accumulating.
+                // But if too much time passes, reset.
+                if (now - lastWheelTime > 200) {
+                    wheelAccumulatorX = 0;
+                    wheelAccumulatorY = 0;
+                }
             }
         }
 
