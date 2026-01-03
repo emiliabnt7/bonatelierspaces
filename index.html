@@ -1,0 +1,1113 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>bonatellierspaces | Architecture Studio</title>
+    <meta name="description"
+        content="bonatellierspaces - A contemporary architecture studio crafting spaces that inspire.">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="logo.png">
+
+    <style>
+        /* CSS Reset */
+        *,
+        *::before,
+        *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg: #f8f6f4;
+            --accent: #302020;
+            --text-primary: #000000;
+            --text-secondary: rgba(0, 0, 0, 0.6);
+            --font-main: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-main);
+            font-weight: 300;
+            background-color: var(--bg);
+            color: var(--text-primary);
+            line-height: 1.5;
+            overflow: hidden;
+            height: 100vh;
+            height: 100dvh;
+            width: 100vw;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        /* Navigation - Top left */
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+            padding: 24px;
+        }
+
+        .nav-logo {
+            height: 28px;
+            width: auto;
+        }
+
+        /* Menu - Top left under logo */
+        .menu {
+            position: fixed;
+            top: 70px;
+            left: 24px;
+            z-index: 1000;
+        }
+
+        .menu-section {
+            margin-bottom: 16px;
+        }
+
+        .menu-title {
+            font-size: 0.7rem;
+            font-weight: 400;
+            letter-spacing: 0.02em;
+            margin-bottom: 6px;
+            color: var(--text-primary);
+        }
+
+        .menu-list {
+            list-style: none;
+        }
+
+        .menu-list li {
+            margin-bottom: 3px;
+        }
+
+        .menu-list a {
+            font-size: 0.65rem;
+            font-weight: 300;
+            letter-spacing: 0.02em;
+            color: var(--text-secondary);
+            transition: color 0.2s;
+        }
+
+        .menu-list a:hover,
+        .menu-list a.active {
+            color: var(--text-primary);
+        }
+
+        /* Footer Links - Bottom left */
+        .footer-links {
+            position: fixed;
+            bottom: 24px;
+            left: 24px;
+            z-index: 1000;
+        }
+
+        .footer-links a {
+            display: block;
+            font-size: 0.65rem;
+            font-weight: 300;
+            letter-spacing: 0.02em;
+            color: var(--text-secondary);
+            margin-bottom: 2px;
+            transition: color 0.2s;
+        }
+
+        .footer-links a:hover {
+            color: var(--text-primary);
+        }
+
+        /* Page Container */
+        .page {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            height: 100dvh;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.4s ease, visibility 0.4s ease;
+            overflow: hidden;
+        }
+
+        .page.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* ========================================
+           GALLERY PAGE
+           ======================================== */
+        .viewer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .vertical-track {
+            transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            will-change: transform;
+        }
+
+        .vertical-track.dragging {
+            transition: none;
+        }
+
+        .project-row {
+            width: 100vw;
+            height: 100vh;
+            height: 100dvh;
+            overflow: hidden;
+        }
+
+        .horizontal-track {
+            display: flex;
+            height: 100%;
+            transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            will-change: transform;
+        }
+
+        .horizontal-track.dragging {
+            transition: none;
+        }
+
+        .carousel-slide {
+            flex-shrink: 0;
+            width: 100vw;
+            height: 100vh;
+            height: 100dvh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .carousel-slide img {
+            max-width: 60vw;
+            max-height: 75vh;
+            max-height: 75dvh;
+            object-fit: contain;
+            pointer-events: none;
+        }
+
+        .project-info {
+            position: fixed;
+            right: 60px;
+            z-index: 1000;
+            text-align: right;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+
+        .project-info.transitioning {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .project-title {
+            font-size: 0.75rem;
+            font-weight: 400;
+            letter-spacing: 0.02em;
+            margin-bottom: 2px;
+        }
+
+        .project-location {
+            font-size: 0.65rem;
+            font-weight: 300;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+        }
+
+        .project-date {
+            font-size: 0.65rem;
+            font-weight: 300;
+            color: var(--text-secondary);
+            margin-bottom: 4px;
+        }
+
+        .project-more {
+            font-size: 0.6rem;
+            font-weight: 300;
+            color: var(--text-secondary);
+            text-decoration: underline;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .project-more:hover {
+            color: var(--text-primary);
+        }
+
+        .image-counter {
+            position: fixed;
+            bottom: 24px;
+            right: 60px;
+            font-size: 0.6rem;
+            font-weight: 300;
+            letter-spacing: 0.05em;
+            color: var(--text-secondary);
+            z-index: 1000;
+        }
+
+        .scroll-indicator {
+            position: fixed;
+            z-index: 1000;
+            font-size: 0.6rem;
+            font-weight: 300;
+            letter-spacing: 0.05em;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            opacity: 0.5;
+            pointer-events: none;
+        }
+
+        .scroll-horizontal {
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .scroll-vertical {
+            right: 24px;
+            top: 50%;
+            transform: translateY(-50%) rotate(90deg);
+        }
+
+        /* ========================================
+           CONTENT PAGES (About, Process, Context)
+           ======================================== */
+        .content-page {
+            padding: 100px 200px 60px 320px;
+            overflow-y: auto;
+            height: 100%;
+        }
+
+        .content-page h1 {
+            font-size: 1.8rem;
+            font-weight: 300;
+            margin-bottom: 2rem;
+            letter-spacing: -0.02em;
+        }
+
+        .content-page p {
+            font-size: 0.9rem;
+            font-weight: 300;
+            line-height: 1.7;
+            max-width: 600px;
+            margin-bottom: 1.5rem;
+            color: var(--text-secondary);
+        }
+
+        /* Team Grid for About page */
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 3rem;
+            margin-top: 3rem;
+        }
+
+        .team-member {
+            text-align: left;
+        }
+
+        .team-member-photo {
+            width: 100%;
+            aspect-ratio: 1;
+            object-fit: cover;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #d0c9c3 0%, #b8b0a8 100%);
+        }
+
+        .team-member-name {
+            font-size: 0.85rem;
+            font-weight: 400;
+            margin-bottom: 0.25rem;
+        }
+
+        .team-member-role {
+            font-size: 0.7rem;
+            font-weight: 300;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+        }
+
+        .team-member-bio {
+            font-size: 0.7rem;
+            font-weight: 300;
+            line-height: 1.5;
+            color: var(--text-secondary);
+        }
+
+        /* ========================================
+           MOBILE ADJUSTMENTS
+           ======================================== */
+        @media (max-width: 768px) {
+            .menu {
+                display: none;
+            }
+
+            .footer-links {
+                display: none;
+            }
+
+            .carousel-slide img {
+                max-width: 90vw;
+                max-height: 50vh;
+                max-height: 50dvh;
+            }
+
+            .project-info {
+                left: 50%;
+                right: auto;
+                bottom: 60px !important;
+                transform: translateX(-50%);
+                text-align: center;
+            }
+
+            .project-info.transitioning {
+                transform: translateX(-50%) translateY(20px);
+            }
+
+            .image-counter {
+                left: 50%;
+                right: auto;
+                bottom: 24px;
+                transform: translateX(-50%);
+            }
+
+            .scroll-indicator {
+                display: none;
+            }
+
+            .content-page {
+                padding: 80px 24px 40px 24px;
+            }
+
+            .content-page h1 {
+                font-size: 1.4rem;
+            }
+
+            .team-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1.5rem;
+            }
+        }
+
+        /* Mobile navigation toggle - hamburger icon */
+        .mobile-nav-toggle {
+            display: none;
+            position: fixed;
+            top: 24px;
+            right: 24px;
+            z-index: 1001;
+            background: none;
+            border: none;
+            width: 24px;
+            height: 18px;
+            cursor: pointer;
+            padding: 0;
+        }
+
+        .mobile-nav-toggle span {
+            display: block;
+            width: 100%;
+            height: 2px;
+            background-color: #302020;
+            margin-bottom: 5px;
+            transition: transform 0.3s, opacity 0.3s;
+        }
+
+        .mobile-nav-toggle span:last-child {
+            margin-bottom: 0;
+        }
+
+        .mobile-nav-toggle.active span:nth-child(1) {
+            transform: translateY(7px) rotate(45deg);
+        }
+
+        .mobile-nav-toggle.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .mobile-nav-toggle.active span:nth-child(3) {
+            transform: translateY(-7px) rotate(-45deg);
+        }
+
+        @media (max-width: 768px) {
+            .mobile-nav-toggle {
+                display: block;
+            }
+        }
+
+        .mobile-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--bg);
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s, visibility 0.3s;
+        }
+
+        .mobile-nav.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .mobile-nav a {
+            font-size: 1.2rem;
+            font-weight: 300;
+            margin: 0.75rem 0;
+            color: var(--text-secondary);
+            transition: color 0.2s;
+        }
+
+        .mobile-nav a:hover,
+        .mobile-nav a.active {
+            color: var(--text-primary);
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Navigation -->
+    <nav class="nav">
+        <a href="#gallery">
+            <img src="logo.png" alt="bonatellierspaces" class="nav-logo">
+        </a>
+    </nav>
+
+    <!-- Desktop Menu -->
+    <div class="menu">
+        <div class="menu-section">
+            <ul class="menu-list">
+                <li><a href="#gallery" data-page="gallery">Gallery</a></li>
+                <li><a href="#about" data-page="about">About</a></li>
+                <li><a href="#process" data-page="process">Process</a></li>
+                <li><a href="#context" data-page="context">Context</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Mobile Nav Toggle (Hamburger) -->
+    <button class="mobile-nav-toggle" id="mobileNavToggle" aria-label="Menu">
+        <span></span>
+        <span></span>
+        <span></span>
+    </button>
+
+    <!-- Mobile Navigation -->
+    <div class="mobile-nav" id="mobileNav">
+        <a href="#gallery" data-page="gallery">Gallery</a>
+        <a href="#about" data-page="about">About</a>
+        <a href="#process" data-page="process">Process</a>
+        <a href="#context" data-page="context">Context</a>
+    </div>
+
+    <!-- Footer Links -->
+    <div class="footer-links">
+        <a href="mailto:hello@bonatellierspaces.com">Contact</a>
+        <a href="#">Instagram</a>
+    </div>
+
+    <!-- ==========================================
+         PAGE: GALLERY
+         ========================================== -->
+    <main class="page active" id="page-gallery">
+        <div class="viewer">
+            <div class="vertical-track" id="verticalTrack"></div>
+        </div>
+
+        <div class="project-info" id="projectInfo">
+            <div class="project-title" id="projectTitle"></div>
+            <div class="project-location" id="projectLocation"></div>
+            <div class="project-date" id="projectDate"></div>
+            <a class="project-more">More info</a>
+        </div>
+
+        <div class="image-counter" id="imageCounter"></div>
+
+        <div class="scroll-indicator scroll-horizontal">← Swipe for more images →</div>
+        <div class="scroll-indicator scroll-vertical">↓ Swipe for next project</div>
+    </main>
+
+    <!-- ==========================================
+         PAGE: ABOUT
+         ========================================== -->
+    <main class="page" id="page-about">
+        <div class="content-page">
+            <h1>About</h1>
+            <p>
+                bonatellierspaces is a contemporary architecture studio founded on the belief that great spaces
+                emerge from the intersection of innovation and timeless design principles. We craft environments
+                that inspire, function beautifully, and stand the test of time.
+            </p>
+            <p>
+                Our multidisciplinary approach brings together architecture, interior design, and spatial thinking
+                to create holistic solutions for residential, commercial, and cultural projects.
+            </p>
+
+            <div class="team-grid">
+                <div class="team-member">
+                    <img src="assets/augusta.jpg" alt="Augusta" class="team-member-photo">
+                    <div class="team-member-name">Augusta</div>
+                    <div class="team-member-role">Principal Architect</div>
+                    <div class="team-member-bio">
+                        With over 15 years of experience in architectural design, leading projects across
+                        Europe and beyond.
+                    </div>
+                </div>
+                <div class="team-member">
+                    <img src="assets/emilia.jpg" alt="Emilia" class="team-member-photo">
+                    <div class="team-member-name">Emilia</div>
+                    <div class="team-member-role">Design Director</div>
+                    <div class="team-member-bio">
+                        Specializing in creating harmonious interior spaces that balance
+                        aesthetics with functionality.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- ==========================================
+         PAGE: PROCESS
+         ========================================== -->
+    <main class="page" id="page-process">
+        <div class="content-page">
+            <h1>Process</h1>
+            <p>
+                Our design process is rooted in deep understanding — of context, of materials, of the
+                human experience. Every project begins with listening: to our clients, to the site,
+                to the aspirations that will shape the final design.
+            </p>
+            <p>
+                <strong>Discovery</strong><br>
+                We begin each project with comprehensive research and site analysis, understanding the
+                physical, cultural, and emotional context in which we'll be working.
+            </p>
+            <p>
+                <strong>Concept</strong><br>
+                From initial sketches to detailed studies, we explore multiple directions before
+                arriving at a design that feels inevitable — as if it couldn't exist any other way.
+            </p>
+            <p>
+                <strong>Development</strong><br>
+                Rigorous technical development ensures our creative vision is buildable, sustainable,
+                and meets the highest standards of quality.
+            </p>
+            <p>
+                <strong>Realization</strong><br>
+                We remain deeply involved through construction, ensuring the finished space matches
+                the precision and care of our original design intent.
+            </p>
+        </div>
+    </main>
+
+    <!-- ==========================================
+         PAGE: CONTEXT
+         ========================================== -->
+    <main class="page" id="page-context">
+        <div class="content-page">
+            <h1>Context</h1>
+            <p>
+                Architecture does not exist in isolation. Every building, every space, is part of a
+                larger conversation — with its surroundings, its history, and the lives that will
+                unfold within it.
+            </p>
+            <p>
+                At bonatellierspaces, context is not a constraint but an inspiration. The genius loci —
+                the spirit of a place — informs every decision we make, from massing and orientation
+                to materiality and light.
+            </p>
+            <p>
+                We believe the best architecture amplifies what's already there: the quality of light,
+                the rhythm of the street, the texture of the landscape. Our buildings don't impose;
+                they converse.
+            </p>
+            <p>
+                This contextual sensitivity extends to how we work with our clients. We take time to
+                understand not just what you need, but how you live — creating spaces that feel
+                like home from the first moment.
+            </p>
+        </div>
+    </main>
+
+    <script>
+        // ==========================================
+        // ROUTER
+        // ==========================================
+        function initRouter() {
+            const pages = document.querySelectorAll('.page');
+            const navLinks = document.querySelectorAll('[data-page]');
+
+            function navigateTo(pageId, projectIdx = null, imageIdx = null) {
+                // Hide all pages
+                pages.forEach(page => page.classList.remove('active'));
+
+                // Show target page
+                const targetPage = document.getElementById(`page-${pageId}`);
+                if (targetPage) {
+                    targetPage.classList.add('active');
+                }
+
+                // Update active nav links
+                navLinks.forEach(link => {
+                    if (link.dataset.page === pageId) {
+                        link.classList.add('active');
+                    } else {
+                        link.classList.remove('active');
+                    }
+                });
+
+                // Close mobile nav
+                document.getElementById('mobileNav').classList.remove('active');
+                document.getElementById('mobileNavToggle').classList.remove('active');
+
+                // Initialize gallery with specific position if provided
+                if (pageId === 'gallery') {
+                    if (projectIdx !== null && projectIdx >= 0 && projectIdx < projects.length) {
+                        currentProjectIndex = projectIdx;
+                        if (imageIdx !== null && imageIdx >= 0 && imageIdx < projects[projectIdx].images.length) {
+                            currentImageIndices[projectIdx] = imageIdx;
+                        }
+                    }
+                    initGallery();
+                }
+            }
+
+            function parseHash(hash) {
+                // Parse formats: 'gallery', 'gallery/1', 'gallery/1/2', 'about', etc.
+                const parts = hash.split('/');
+                const pageId = parts[0] || 'gallery';
+                const projectIdx = parts[1] !== undefined ? parseInt(parts[1], 10) : null;
+                const imageIdx = parts[2] !== undefined ? parseInt(parts[2], 10) : null;
+                return { pageId, projectIdx, imageIdx };
+            }
+
+            function handleHashChange() {
+                const hash = window.location.hash.slice(1) || 'gallery';
+                const { pageId, projectIdx, imageIdx } = parseHash(hash);
+                navigateTo(pageId, projectIdx, imageIdx);
+            }
+
+            // Listen for hash changes
+            window.addEventListener('hashchange', handleHashChange);
+
+            // Handle initial load
+            handleHashChange();
+
+            // Mobile nav toggle
+            const mobileNavToggle = document.getElementById('mobileNavToggle');
+            const mobileNav = document.getElementById('mobileNav');
+
+            mobileNavToggle.addEventListener('click', () => {
+                mobileNav.classList.toggle('active');
+                mobileNavToggle.classList.toggle('active');
+            });
+        }
+
+        // Update URL hash for gallery position (without triggering navigation)
+        function updateGalleryHash() {
+            const projectIdx = currentProjectIndex;
+            const imageIdx = currentImageIndices[projectIdx];
+            const newHash = `#gallery/${projectIdx}/${imageIdx}`;
+
+            // Use replaceState to update URL without adding to history for every swipe
+            history.replaceState(null, '', newHash);
+        }
+
+        // ==========================================
+        // GALLERY
+        // ==========================================
+        const projects = [
+            {
+                folder: '1',
+                images: ['1.jpg', '986f3969-2132-494b-92ba-774ac0fc1845.jpg', 'f1559519-0758-4b0d-818c-bef1ef43d7ee.jpg', 'f29c80cc-753d-40e5-b78b-4ed96ff057c6.jpg'],
+                title: 'Residential Project',
+                location: 'Vilnius, Lithuania',
+                date: '2024—2025'
+            },
+            {
+                folder: '2',
+                images: ['1.jpg', '2.jpg', '3.jpg'],
+                title: 'Commercial Complex',
+                location: 'Kaunas, Lithuania',
+                date: '2023—2024'
+            },
+            {
+                folder: '3',
+                images: ['24479ad3-13f5-42b1-b4c2-93a476b3d9c1.jpg', 'b4884149-358d-45f7-9a6b-2e596a8bd97a.jpg'],
+                title: 'Project 3',
+                location: 'Location TBD',
+                date: '2023'
+            }
+        ];
+
+        let currentProjectIndex = 0;
+        let currentImageIndices = projects.map(() => 0);
+        let isDragging = false;
+        let startX = 0;
+        let startY = 0;
+        let dragDeltaX = 0;
+        let dragDeltaY = 0;
+        let currentTranslateX = 0;
+        let currentTranslateY = 0;
+        let galleryInitialized = false;
+
+        const verticalTrack = document.getElementById('verticalTrack');
+        const projectTitle = document.getElementById('projectTitle');
+        const projectLocation = document.getElementById('projectLocation');
+        const projectDate = document.getElementById('projectDate');
+        const projectInfo = document.getElementById('projectInfo');
+        const imageCounter = document.getElementById('imageCounter');
+
+        function getViewportHeight() {
+            return window.visualViewport ? window.visualViewport.height : window.innerHeight;
+        }
+
+        function initGallery() {
+            if (!galleryInitialized) {
+                buildAllProjects();
+                setupGalleryEventListeners();
+                galleryInitialized = true;
+            }
+            updateProjectInfo();
+            updatePositions(false);
+            positionProjectInfo();
+        }
+
+        function buildAllProjects() {
+            verticalTrack.innerHTML = '';
+
+            projects.forEach((project, projectIdx) => {
+                const projectRow = document.createElement('div');
+                projectRow.className = 'project-row';
+                projectRow.dataset.projectIndex = projectIdx;
+
+                const horizontalTrack = document.createElement('div');
+                horizontalTrack.className = 'horizontal-track';
+                horizontalTrack.dataset.projectIndex = projectIdx;
+
+                project.images.forEach((img, imgIdx) => {
+                    const slide = document.createElement('div');
+                    slide.className = 'carousel-slide';
+                    slide.innerHTML = `<img src="gallery/${project.folder}/${img}" alt="${project.title} - Image ${imgIdx + 1}">`;
+                    horizontalTrack.appendChild(slide);
+                });
+
+                projectRow.appendChild(horizontalTrack);
+                verticalTrack.appendChild(projectRow);
+            });
+        }
+
+        function updatePositions(animate = true) {
+            const viewportHeight = getViewportHeight();
+            const verticalOffset = -currentProjectIndex * viewportHeight;
+            currentTranslateY = verticalOffset;
+
+            if (!animate) {
+                verticalTrack.classList.add('dragging');
+            } else {
+                verticalTrack.classList.remove('dragging');
+            }
+
+            verticalTrack.style.transform = `translateY(${verticalOffset + dragDeltaY}px)`;
+
+            const horizontalTracks = document.querySelectorAll('.horizontal-track');
+            horizontalTracks.forEach((track, idx) => {
+                const imageIndex = currentImageIndices[idx];
+                const horizontalOffset = -imageIndex * window.innerWidth;
+
+                if (idx === currentProjectIndex) {
+                    if (!animate) {
+                        track.classList.add('dragging');
+                    } else {
+                        track.classList.remove('dragging');
+                    }
+                    track.style.transform = `translateX(${horizontalOffset + dragDeltaX}px)`;
+                    currentTranslateX = horizontalOffset;
+                } else {
+                    track.style.transform = `translateX(${horizontalOffset}px)`;
+                }
+            });
+
+            if (!animate) {
+                requestAnimationFrame(() => {
+                    verticalTrack.classList.remove('dragging');
+                    horizontalTracks.forEach(t => t.classList.remove('dragging'));
+                });
+            }
+
+            updateCounter();
+        }
+
+        function updateProjectInfo() {
+            const project = projects[currentProjectIndex];
+            projectTitle.textContent = project.title;
+            projectLocation.textContent = project.location;
+            projectDate.textContent = project.date;
+        }
+
+        function updateCounter() {
+            const project = projects[currentProjectIndex];
+            const imageIndex = currentImageIndices[currentProjectIndex];
+            if (project.images.length > 1) {
+                imageCounter.textContent = `${imageIndex + 1} / ${project.images.length}`;
+                imageCounter.style.display = 'block';
+            } else {
+                imageCounter.style.display = 'none';
+            }
+        }
+
+        function positionProjectInfo() {
+            setTimeout(() => {
+                const projectRow = verticalTrack.children[currentProjectIndex];
+                if (!projectRow) return;
+
+                const horizontalTrack = projectRow.querySelector('.horizontal-track');
+                const imageIndex = currentImageIndices[currentProjectIndex];
+                const slide = horizontalTrack.children[imageIndex];
+                if (!slide) return;
+
+                const img = slide.querySelector('img');
+                if (!img) return;
+
+                if (!img.complete || !img.naturalHeight) {
+                    img.onload = () => positionProjectInfo();
+                    return;
+                }
+
+                const viewportHeight = getViewportHeight();
+                const maxWidth = window.innerWidth * 0.6;
+                const maxHeight = viewportHeight * 0.75;
+                const imgRatio = img.naturalWidth / img.naturalHeight;
+
+                const isMobile = window.innerWidth <= 768;
+                const mobileMaxWidth = window.innerWidth * 0.9;
+                const mobileMaxHeight = viewportHeight * 0.5;
+
+                const effectiveMaxWidth = isMobile ? mobileMaxWidth : maxWidth;
+                const effectiveMaxHeight = isMobile ? mobileMaxHeight : maxHeight;
+
+                let displayWidth, displayHeight;
+                if (imgRatio > effectiveMaxWidth / effectiveMaxHeight) {
+                    displayWidth = Math.min(img.naturalWidth, effectiveMaxWidth);
+                    displayHeight = displayWidth / imgRatio;
+                } else {
+                    displayHeight = Math.min(img.naturalHeight, effectiveMaxHeight);
+                    displayWidth = displayHeight * imgRatio;
+                }
+
+                const imageBottom = (viewportHeight - displayHeight) / 2 + displayHeight;
+                const bottomPosition = viewportHeight - imageBottom;
+
+                projectInfo.style.bottom = `${Math.max(bottomPosition, 16)}px`;
+            }, 100);
+        }
+
+        function setupGalleryEventListeners() {
+            const galleryPage = document.getElementById('page-gallery');
+
+            galleryPage.addEventListener('mousedown', handleDragStart);
+            document.addEventListener('mousemove', handleDragMove);
+            document.addEventListener('mouseup', handleDragEnd);
+
+            galleryPage.addEventListener('touchstart', handleDragStart, { passive: true });
+            document.addEventListener('touchmove', handleDragMove, { passive: false });
+            document.addEventListener('touchend', handleDragEnd);
+
+            document.addEventListener('keydown', handleKeydown);
+
+            galleryPage.addEventListener('contextmenu', e => e.preventDefault());
+
+            const handleResize = () => {
+                if (document.getElementById('page-gallery').classList.contains('active')) {
+                    updatePositions(false);
+                    positionProjectInfo();
+                }
+            };
+            window.addEventListener('resize', handleResize);
+            if (window.visualViewport) {
+                window.visualViewport.addEventListener('resize', handleResize);
+            }
+        }
+
+        function handleDragStart(e) {
+            if (!document.getElementById('page-gallery').classList.contains('active')) return;
+
+            isDragging = true;
+
+            const point = e.touches ? e.touches[0] : e;
+            startX = point.clientX;
+            startY = point.clientY;
+            dragDeltaX = 0;
+            dragDeltaY = 0;
+
+            verticalTrack.classList.add('dragging');
+            const currentHorizontalTrack = document.querySelector(`.horizontal-track[data-project-index="${currentProjectIndex}"]`);
+            if (currentHorizontalTrack) {
+                currentHorizontalTrack.classList.add('dragging');
+            }
+        }
+
+        function handleDragMove(e) {
+            if (!isDragging) return;
+
+            const point = e.touches ? e.touches[0] : e;
+            const deltaX = point.clientX - startX;
+            const deltaY = point.clientY - startY;
+
+            if (Math.abs(deltaX) > Math.abs(deltaY)) {
+                dragDeltaX = deltaX;
+                dragDeltaY = 0;
+                if (e.cancelable) e.preventDefault();
+            } else {
+                dragDeltaX = 0;
+                dragDeltaY = deltaY;
+                if (e.cancelable) e.preventDefault();
+            }
+
+            const viewportHeight = getViewportHeight();
+            const verticalOffset = -currentProjectIndex * viewportHeight + dragDeltaY;
+            verticalTrack.style.transform = `translateY(${verticalOffset}px)`;
+
+            const currentHorizontalTrack = document.querySelector(`.horizontal-track[data-project-index="${currentProjectIndex}"]`);
+            if (currentHorizontalTrack) {
+                const imageIndex = currentImageIndices[currentProjectIndex];
+                const horizontalOffset = -imageIndex * window.innerWidth + dragDeltaX;
+                currentHorizontalTrack.style.transform = `translateX(${horizontalOffset}px)`;
+            }
+        }
+
+        function handleDragEnd(e) {
+            if (!isDragging) return;
+            isDragging = false;
+
+            verticalTrack.classList.remove('dragging');
+            const currentHorizontalTrack = document.querySelector(`.horizontal-track[data-project-index="${currentProjectIndex}"]`);
+            if (currentHorizontalTrack) {
+                currentHorizontalTrack.classList.remove('dragging');
+            }
+
+            const swipeThreshold = 80;
+            const project = projects[currentProjectIndex];
+            const imageIndex = currentImageIndices[currentProjectIndex];
+
+            let projectChanged = false;
+
+            if (Math.abs(dragDeltaX) > Math.abs(dragDeltaY) && Math.abs(dragDeltaX) > swipeThreshold) {
+                if (dragDeltaX > 0 && imageIndex > 0) {
+                    currentImageIndices[currentProjectIndex]--;
+                } else if (dragDeltaX < 0 && imageIndex < project.images.length - 1) {
+                    currentImageIndices[currentProjectIndex]++;
+                }
+            } else if (Math.abs(dragDeltaY) > swipeThreshold) {
+                if (dragDeltaY > 0 && currentProjectIndex > 0) {
+                    currentProjectIndex--;
+                    projectChanged = true;
+                } else if (dragDeltaY < 0 && currentProjectIndex < projects.length - 1) {
+                    currentProjectIndex++;
+                    projectChanged = true;
+                }
+            }
+
+            dragDeltaX = 0;
+            dragDeltaY = 0;
+
+            updatePositions(true);
+            updateGalleryHash(); // Update URL for deep linking
+
+            if (projectChanged) {
+                projectInfo.classList.add('transitioning');
+                setTimeout(() => {
+                    updateProjectInfo();
+                    projectInfo.classList.remove('transitioning');
+                    positionProjectInfo();
+                }, 200);
+            } else {
+                positionProjectInfo();
+            }
+        }
+
+        function handleKeydown(e) {
+            if (!document.getElementById('page-gallery').classList.contains('active')) return;
+
+            const project = projects[currentProjectIndex];
+            const imageIndex = currentImageIndices[currentProjectIndex];
+            let projectChanged = false;
+
+            switch (e.key) {
+                case 'ArrowRight':
+                    if (imageIndex < project.images.length - 1) {
+                        currentImageIndices[currentProjectIndex]++;
+                        updatePositions(true);
+                        updateGalleryHash();
+                        positionProjectInfo();
+                    }
+                    break;
+                case 'ArrowLeft':
+                    if (imageIndex > 0) {
+                        currentImageIndices[currentProjectIndex]--;
+                        updatePositions(true);
+                        updateGalleryHash();
+                        positionProjectInfo();
+                    }
+                    break;
+                case 'ArrowDown':
+                    if (currentProjectIndex < projects.length - 1) {
+                        currentProjectIndex++;
+                        projectChanged = true;
+                    }
+                    break;
+                case 'ArrowUp':
+                    if (currentProjectIndex > 0) {
+                        currentProjectIndex--;
+                        projectChanged = true;
+                    }
+                    break;
+            }
+
+            if (projectChanged) {
+                projectInfo.classList.add('transitioning');
+                updatePositions(true);
+                updateGalleryHash();
+                setTimeout(() => {
+                    updateProjectInfo();
+                    projectInfo.classList.remove('transitioning');
+                    positionProjectInfo();
+                }, 200);
+            }
+        }
+
+        // ==========================================
+        // INITIALIZE
+        // ==========================================
+        initRouter();
+    </script>
+
+</body>
+
+</html>
