@@ -5,11 +5,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>bonatellierspaces | Architecture Studio</title>
-    <meta name="description"
+    <meta name="description" id="metaDescription"
         content="bonatellierspaces - A contemporary architecture studio crafting spaces that inspire.">
 
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="logo.png">
+
+    <!-- Fonts - Using system fonts -->
+
 
     <style>
         /* CSS Reset */
@@ -19,14 +22,18 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            cursor: none !important;
         }
 
         :root {
-            --bg: #f8f6f4;
-            --accent: #302020;
-            --text-primary: #000000;
-            --text-secondary: rgba(0, 0, 0, 0.6);
+            --bg: #fdfcfb;
+            --accent: #1a1a1a;
+            --text-primary: #1a1a1a;
+            --text-secondary: rgba(26, 26, 26, 0.5);
             --font-main: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            --font-heading: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            --transition-speed: 0.6s;
+            --transition-ease: cubic-bezier(0.2, 0, 0.2, 1);
         }
 
         html {
@@ -66,10 +73,38 @@
             width: auto;
         }
 
+        .nav-logo-desktop,
+        .nav-logo-box {
+            display: none;
+        }
+
+        @media (min-width: 769px) {
+            .nav-logo {
+                display: none;
+            }
+
+            .nav-logo-desktop {
+                display: block;
+                height: 32px;
+                width: auto;
+            }
+
+            .nav-logo-box {
+                position: fixed;
+                top: 24px;
+                right: 24px;
+                height: 42px;
+                /* Increased from 32px by 131% */
+                width: auto;
+                z-index: 1100;
+                display: block;
+            }
+        }
+
         /* Menu - Top left under logo */
         .menu {
             position: fixed;
-            top: 70px;
+            top: 25vh;
             left: 24px;
             z-index: 1000;
         }
@@ -95,8 +130,9 @@
         }
 
         .menu-list a {
-            font-size: 0.65rem;
-            font-weight: 300;
+            font-family: Baskerville, 'Baskerville Old Face', 'Times New Roman', serif;
+            font-size: 0.85rem;
+            font-weight: 400;
             letter-spacing: 0.02em;
             color: var(--text-secondary);
             transition: color 0.2s;
@@ -107,26 +143,48 @@
             color: var(--text-primary);
         }
 
-        /* Footer Links - Bottom left */
-        .footer-links {
+        /* Language Switcher - Bottom left */
+        .language-switcher {
             position: fixed;
             bottom: 24px;
             left: 24px;
             z-index: 1000;
+            display: flex;
+            gap: 12px;
         }
 
-        .footer-links a {
-            display: block;
-            font-size: 0.65rem;
-            font-weight: 300;
-            letter-spacing: 0.02em;
+        .language-switcher a {
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
             color: var(--text-secondary);
-            margin-bottom: 2px;
             transition: color 0.2s;
         }
 
-        .footer-links a:hover {
+        .language-switcher a:hover,
+        .language-switcher a.active {
             color: var(--text-primary);
+        }
+
+        /* Credits - Bottom right */
+        .website-credits {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            z-index: 1100;
+            font-size: 0.65rem;
+            font-weight: 300;
+            color: var(--text-secondary);
+            pointer-events: none;
+        }
+
+        @media (max-width: 768px) {
+
+            .language-switcher,
+            .website-credits {
+                display: none;
+            }
         }
 
         /* Page Container */
@@ -139,13 +197,15 @@
             height: 100dvh;
             opacity: 0;
             visibility: hidden;
-            transition: opacity 0.4s ease, visibility 0.4s ease;
+            transition: opacity var(--transition-speed) var(--transition-ease), visibility var(--transition-speed) var(--transition-ease);
             overflow: hidden;
+            background-color: var(--bg);
         }
 
         .page.active {
             opacity: 1;
             visibility: visible;
+            z-index: 500;
         }
 
         /* ========================================
@@ -203,49 +263,75 @@
             max-height: 75dvh;
             object-fit: contain;
             pointer-events: none;
+            opacity: 0;
+            transform: scale(0.98);
+            transition: opacity 1s var(--transition-ease), transform 1.2s var(--transition-ease);
+        }
+
+        .carousel-slide img.loaded {
+            opacity: 1;
+            transform: scale(1);
         }
 
         .project-info {
             position: fixed;
-            right: 60px;
             z-index: 1000;
-            text-align: right;
+            text-align: left;
             transition: opacity 0.3s ease, transform 0.3s ease;
         }
 
         .project-info.transitioning {
             opacity: 0;
-            transform: translateY(20px);
+            transform: translateY(10px);
         }
 
         .project-title {
             font-size: 0.75rem;
-            font-weight: 400;
-            letter-spacing: 0.02em;
-            margin-bottom: 2px;
-        }
-
-        .project-location {
-            font-size: 0.65rem;
-            font-weight: 300;
-            color: var(--text-secondary);
+            font-weight: 700;
+            letter-spacing: 0.05em;
             margin-bottom: 8px;
+            text-transform: uppercase;
         }
 
+        .project-location,
         .project-date {
             font-size: 0.65rem;
             font-weight: 300;
             color: var(--text-secondary);
-            margin-bottom: 4px;
+            margin-bottom: 2px;
         }
 
         .project-more {
-            font-size: 0.6rem;
+            font-size: 0.65rem;
             font-weight: 300;
-            color: var(--text-secondary);
+            color: var(--text-primary);
             text-decoration: underline;
             cursor: pointer;
-            transition: color 0.2s;
+            transition: opacity 0.2s;
+            margin-top: 12px;
+            display: inline-block;
+        }
+
+        .project-description-overlay {
+            position: fixed;
+            z-index: 1000;
+            max-width: 300px;
+            font-family: Baskerville, 'Baskerville Old Face', 'Times New Roman', serif;
+            font-size: 0.8rem;
+            line-height: 1.7;
+            color: var(--text-primary);
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px);
+            transition: opacity 0.4s var(--transition-ease), visibility 0.4s var(--transition-ease), transform 0.4s var(--transition-ease);
+            pointer-events: none;
+        }
+
+        .project-description-overlay.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+            pointer-events: auto;
         }
 
         .project-more:hover {
@@ -254,17 +340,18 @@
 
         .image-counter {
             position: fixed;
-            bottom: 24px;
-            right: 60px;
-            font-size: 0.6rem;
+            font-size: 0.65rem;
             font-weight: 300;
             letter-spacing: 0.05em;
             color: var(--text-secondary);
             z-index: 1000;
         }
 
-        .scroll-indicator {
+        .scroll-horizontal {
             position: fixed;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%);
             z-index: 1000;
             font-size: 0.6rem;
             font-weight: 300;
@@ -275,16 +362,21 @@
             pointer-events: none;
         }
 
-        .scroll-horizontal {
-            bottom: 24px;
-            left: 50%;
-            transform: translateX(-50%);
-        }
-
         .scroll-vertical {
+            position: fixed;
             right: 24px;
             top: 50%;
-            transform: translateY(-50%) rotate(90deg);
+            transform: translate(50%, -50%) rotate(90deg);
+            transform-origin: center center;
+            z-index: 1000;
+            font-size: 0.6rem;
+            font-weight: 300;
+            letter-spacing: 0.05em;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            opacity: 0.5;
+            pointer-events: none;
+            white-space: nowrap;
         }
 
         /* ========================================
@@ -297,17 +389,18 @@
         }
 
         .content-page h1 {
-            font-size: 1.8rem;
-            font-weight: 300;
+            font-size: 0.75rem;
+            font-weight: 700;
             margin-bottom: 2rem;
-            letter-spacing: -0.02em;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
         }
 
         .content-page p {
-            font-size: 0.9rem;
+            font-size: 0.65rem;
             font-weight: 300;
             line-height: 1.7;
-            max-width: 600px;
+            max-width: 300px;
             margin-bottom: 1.5rem;
             color: var(--text-secondary);
         }
@@ -401,11 +494,14 @@
                 font-size: 1.4rem;
             }
 
+
+
             .team-grid {
                 grid-template-columns: repeat(2, 1fr);
                 gap: 1.5rem;
             }
         }
+
 
         /* Mobile navigation toggle - hamburger icon */
         .mobile-nav-toggle {
@@ -487,26 +583,92 @@
         .mobile-nav a.active {
             color: var(--text-primary);
         }
+
+        /* Custom Cursor */
+        .cursor-dot {
+            width: 5px;
+            height: 5px;
+            background-color: var(--text-secondary);
+            border-radius: 50%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: 9999;
+            transition: transform 0.1s ease;
+        }
+
+        .cursor-outline {
+            width: 28px;
+            height: 28px;
+            border: 1px solid rgba(26, 26, 26, 0.2);
+            border-radius: 50%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: 9998;
+            transition: transform 0.2s var(--transition-ease), opacity 0.2s var(--transition-ease), width 0.3s var(--transition-ease), height 0.3s var(--transition-ease);
+            transform: translate(-50%, -50%);
+        }
+
+        .cursor-hover .cursor-outline {
+            width: 48px;
+            height: 48px;
+            background-color: rgba(26, 26, 26, 0.02);
+            border-color: rgba(26, 26, 26, 0.3);
+        }
+
+        @media (max-width: 1024px) {
+
+            .cursor-dot,
+            .cursor-outline {
+                display: none;
+            }
+
+            * {
+                cursor: auto !important;
+            }
+        }
+
+        /* Team Photo Hover */
+        .team-member-photo {
+            width: 100%;
+            aspect-ratio: 1;
+            object-fit: cover;
+            margin-bottom: 1rem;
+            filter: grayscale(1);
+            transition: filter 0.6s var(--transition-ease), transform 0.6s var(--transition-ease);
+        }
+
+        .team-member:hover .team-member-photo {
+            filter: grayscale(0);
+            transform: scale(1.02);
+        }
     </style>
 </head>
 
 <body>
+    <div class="cursor-dot" id="cursorDot"></div>
+    <div class="cursor-outline" id="cursorOutline"></div>
 
     <!-- Navigation -->
     <nav class="nav">
         <a href="#gallery">
-            <img src="logo.png" alt="bonatellierspaces" class="nav-logo">
+            <img src="Text Logo BR.png" alt="bonatellierspaces" class="nav-logo">
+            <img src="Text Logo BR.png" alt="bonatelier" class="nav-logo-desktop">
         </a>
     </nav>
+    <img src="Box Logo BR.png" alt="logo" class="nav-logo-box">
 
     <!-- Desktop Menu -->
     <div class="menu">
         <div class="menu-section">
             <ul class="menu-list">
-                <li><a href="#gallery" data-page="gallery">Gallery</a></li>
-                <li><a href="#about" data-page="about">About</a></li>
-                <li><a href="#process" data-page="process">Process</a></li>
-                <li><a href="#context" data-page="context">Context</a></li>
+                <li><a href="#gallery" data-page="gallery" class="translate" data-key="gallery">Gallery</a></li>
+                <li><a href="#about" data-page="about" class="translate" data-key="about">About</a></li>
+                <li><a href="#process" data-page="process" class="translate" data-key="process">Process</a></li>
+                <li><a href="#contacts" data-page="contacts" class="translate" data-key="contacts">Contacts</a></li>
             </ul>
         </div>
     </div>
@@ -520,17 +682,23 @@
 
     <!-- Mobile Navigation -->
     <div class="mobile-nav" id="mobileNav">
-        <a href="#gallery" data-page="gallery">Gallery</a>
-        <a href="#about" data-page="about">About</a>
-        <a href="#process" data-page="process">Process</a>
-        <a href="#context" data-page="context">Context</a>
+        <a href="#gallery" data-page="gallery" class="translate" data-key="gallery">Gallery</a>
+        <a href="#about" data-page="about" class="translate" data-key="about">About</a>
+        <a href="#process" data-page="process" class="translate" data-key="process">Process</a>
+        <a href="#contacts" data-page="contacts" class="translate" data-key="contacts">Contacts</a>
     </div>
 
-    <!-- Footer Links -->
-    <div class="footer-links">
-        <a href="mailto:hello@bonatellierspaces.com">Contact</a>
-        <a href="#">Instagram</a>
+    <!-- Language Switcher -->
+    <div class="language-switcher">
+        <a href="#" class="active" onclick="setLanguage(event, 'EN')">EN</a>
+        <a href="#" onclick="setLanguage(event, 'LT')">LT</a>
+        <a href="#" onclick="setLanguage(event, 'FR')">FR</a>
     </div>
+
+    <!-- Website Credits -->
+    <div class="website-credits translate" data-key="credits" id="credits">© Bonatelier Spaces 2026</div>
+
+
 
     <!-- ==========================================
          PAGE: GALLERY
@@ -540,17 +708,21 @@
             <div class="vertical-track" id="verticalTrack"></div>
         </div>
 
+        <div class="project-description-overlay" id="projectDescriptionOverlay"></div>
+
         <div class="project-info" id="projectInfo">
             <div class="project-title" id="projectTitle"></div>
             <div class="project-location" id="projectLocation"></div>
             <div class="project-date" id="projectDate"></div>
-            <a class="project-more">More info</a>
+            <a class="project-more translate" id="toggleMoreInfo" data-key="moreInfo">More information</a>
         </div>
 
         <div class="image-counter" id="imageCounter"></div>
 
-        <div class="scroll-indicator scroll-horizontal">← Swipe for more images →</div>
-        <div class="scroll-indicator scroll-vertical">↓ Swipe for next project</div>
+        <div class="scroll-indicator scroll-horizontal translate" id="scrollHorizontal" data-key="swipeImages">← SWIPE
+            FOR MORE IMAGES →</div>
+        <div class="scroll-indicator scroll-vertical translate" id="scrollVertical" data-key="swipeProjects">← SWIPE FOR
+            MORE PROJECTS →</div>
     </main>
 
     <!-- ==========================================
@@ -558,13 +730,13 @@
          ========================================== -->
     <main class="page" id="page-about">
         <div class="content-page">
-            <h1>About</h1>
-            <p>
+            <h1><span class="translate" data-key="about">ABOUT</span></h1>
+            <p class="translate" data-key="aboutDescription">
                 bonatellierspaces is a contemporary architecture studio founded on the belief that great spaces
                 emerge from the intersection of innovation and timeless design principles. We craft environments
                 that inspire, function beautifully, and stand the test of time.
             </p>
-            <p>
+            <p class="translate" data-key="aboutPhilosophy">
                 Our multidisciplinary approach brings together architecture, interior design, and spatial thinking
                 to create holistic solutions for residential, commercial, and cultural projects.
             </p>
@@ -574,7 +746,7 @@
                     <img src="assets/augusta.jpg" alt="Augusta" class="team-member-photo">
                     <div class="team-member-name">Augusta</div>
                     <div class="team-member-role">Principal Architect</div>
-                    <div class="team-member-bio">
+                    <div class="team-member-bio translate" data-key="teamAugustaBio">
                         With over 15 years of experience in architectural design, leading projects across
                         Europe and beyond.
                     </div>
@@ -583,7 +755,7 @@
                     <img src="assets/emilia.jpg" alt="Emilia" class="team-member-photo">
                     <div class="team-member-name">Emilia</div>
                     <div class="team-member-role">Design Director</div>
-                    <div class="team-member-bio">
+                    <div class="team-member-bio translate" data-key="teamEmiliaBio">
                         Specializing in creating harmonious interior spaces that balance
                         aesthetics with functionality.
                     </div>
@@ -597,60 +769,70 @@
          ========================================== -->
     <main class="page" id="page-process">
         <div class="content-page">
-            <h1>Process</h1>
-            <p>
+            <h1><span class="translate" data-key="process">PROCESS</span></h1>
+            <p class="translate" data-key="processIntro">
                 Our design process is rooted in deep understanding — of context, of materials, of the
                 human experience. Every project begins with listening: to our clients, to the site,
                 to the aspirations that will shape the final design.
             </p>
             <p>
-                <strong>Discovery</strong><br>
-                We begin each project with comprehensive research and site analysis, understanding the
-                physical, cultural, and emotional context in which we'll be working.
+                <strong class="translate" data-key="processDiscovery">Discovery</strong><br>
+                <span class="translate" data-key="processDiscoveryText">
+                    We begin each project with comprehensive research and site analysis, understanding the
+                    physical, cultural, and emotional context in which we'll be working.
+                </span>
             </p>
             <p>
-                <strong>Concept</strong><br>
-                From initial sketches to detailed studies, we explore multiple directions before
-                arriving at a design that feels inevitable — as if it couldn't exist any other way.
+                <strong class="translate" data-key="processConcept">Concept</strong><br>
+                <span class="translate" data-key="processConceptText">
+                    From initial sketches to detailed studies, we explore multiple directions before
+                    arriving at a design that feels inevitable — as if it couldn't exist any other way.
+                </span>
             </p>
             <p>
-                <strong>Development</strong><br>
-                Rigorous technical development ensures our creative vision is buildable, sustainable,
-                and meets the highest standards of quality.
+                <strong class="translate" data-key="processDevelopment">Development</strong><br>
+                <span class="translate" data-key="processDevelopmentText">
+                    Rigorous technical development ensures our creative vision is buildable, sustainable,
+                    and meets the highest standards of quality.
+                </span>
             </p>
             <p>
-                <strong>Realization</strong><br>
-                We remain deeply involved through construction, ensuring the finished space matches
-                the precision and care of our original design intent.
+                <strong class="translate" data-key="processRealization">Realization</strong><br>
+                <span class="translate" data-key="processRealizationText">
+                    We remain deeply involved through construction, ensuring the finished space matches
+                    the precision and care of our original design intent.
+                </span>
             </p>
         </div>
     </main>
 
     <!-- ==========================================
-         PAGE: CONTEXT
+         PAGE: CONTACTS
          ========================================== -->
-    <main class="page" id="page-context">
+    <main class="page" id="page-contacts">
         <div class="content-page">
-            <h1>Context</h1>
-            <p>
-                Architecture does not exist in isolation. Every building, every space, is part of a
-                larger conversation — with its surroundings, its history, and the lives that will
-                unfold within it.
+            <h1><span class="translate" data-key="contacts">CONTACTS</span></h1>
+            <p class="translate" data-key="contactsIntro">
+                For project enquiries, please feel free to reach out to us directly.
             </p>
             <p>
-                At bonatellierspaces, context is not a constraint but an inspiration. The genius loci —
-                the spirit of a place — informs every decision we make, from massing and orientation
-                to materiality and light.
+                <strong class="translate" data-key="emailLabel">Email</strong><br>
+                <a href="mailto:ae.bonatelier@gmail.com" style="text-decoration: underline;">ae.bonatelier@gmail.com</a>
             </p>
             <p>
-                We believe the best architecture amplifies what's already there: the quality of light,
-                the rhythm of the street, the texture of the landscape. Our buildings don't impose;
-                they converse.
+                <strong class="translate" data-key="phoneLabel">Phone</strong><br>
+                +370 65557983
             </p>
             <p>
-                This contextual sensitivity extends to how we work with our clients. We take time to
-                understand not just what you need, but how you live — creating spaces that feel
-                like home from the first moment.
+                <strong class="translate" data-key="addressLabel">Address</strong><br>
+                Gelių g. 4, 01137, Vilnius
+            </p>
+            <p>
+                <strong class="translate" data-key="socialLabel">Social</strong><br>
+                <a href="https://www.instagram.com/bonatelierspaces/" target="_blank"
+                    style="text-decoration: underline;">Instagram</a><br>
+                <a href="https://ca.pinterest.com/spacesbybonatelier/" target="_blank"
+                    style="text-decoration: underline;">Pinterest</a>
             </p>
         </div>
     </main>
@@ -740,28 +922,159 @@
         }
 
         // ==========================================
+        // TRANSLATIONS
+        // ==========================================
+        const translations = {
+            EN: {
+                gallery: "Gallery",
+                about: "About",
+                process: "Process",
+                contacts: "Contacts",
+                moreInfo: "More information",
+                swipeImages: "← SWIPE FOR MORE IMAGES →",
+                swipeProjects: "← SWIPE FOR MORE PROJECTS →",
+                credits: "© Bonatelier Spaces 2026",
+                aboutDescription: "bonatellierspaces is a contemporary architecture studio founded on the belief that great spaces emerge from the intersection of innovation and timeless design principles. We craft environments that inspire, function beautifully, and stand the test of time.",
+                aboutPhilosophy: "Our multidisciplinary approach brings together architecture, interior design, and spatial thinking to create holistic solutions for residential, commercial, and cultural projects.",
+                teamAugustaBio: "With over 15 years of experience in architectural design, leading projects across Europe and beyond.",
+                teamEmiliaBio: "Specializing in creating harmonious interior spaces that balance aesthetics with functionality.",
+                processIntro: "Our design process is rooted in deep understanding — of context, of materials, of the human experience. Every project begins with listening: to our clients, to the site, to the aspirations that will shape the final design.",
+                processDiscovery: "Discovery",
+                processDiscoveryText: "We begin each project with comprehensive research and site analysis, understanding the physical, cultural, and emotional context in which we'll be working.",
+                processConcept: "Concept",
+                processConceptText: "From initial sketches to detailed studies, we explore multiple directions before arriving at a design that feels inevitable — as if it couldn't exist any other way.",
+                processDevelopment: "Development",
+                processDevelopmentText: "Rigorous technical development ensures our creative vision is buildable, sustainable, and meets the highest standards of quality.",
+                processRealization: "Realization",
+                processRealizationText: "We remain deeply involved through construction, ensuring the finished space matches the precision and care of our original design intent.",
+                contactsIntro: "For project enquiries, please feel free to reach out to us directly.",
+                emailLabel: "Email",
+                phoneLabel: "Phone",
+                addressLabel: "Address",
+                socialLabel: "Social"
+            },
+            LT: {
+                gallery: "Galerija",
+                about: "Apie",
+                process: "Procesas",
+                contacts: "Kontaktai",
+                moreInfo: "Daugiau informacijos",
+                swipeImages: "← BRAUKITE DAUGIAU NUOTRAUKŲ →",
+                swipeProjects: "← BRAUKITE DAUGIAU PROJEKTŲ →",
+                credits: "© Bonatelier Spaces 2026",
+                aboutDescription: "bonatellierspaces yra šiuolaikinė architektūros studija, įkurta tikint, kad puikios erdvės atsiranda inovacijų ir nesenstančių dizaino principų sankirtoje. Mes kuriame aplinką, kuri įkvepia, gražiai funkcionuoja ir atlaiko laiko išbandymus.",
+                aboutPhilosophy: "Mūsų daugiadalykis požiūris apjungia architektūrą, interjero dizainą ir erdvinį mąstymą, siekiant sukurti holistinius sprendimus gyvenamiesiems, komerciniams ir kultūriniams projektams.",
+                teamAugustaBio: "Turinti daugiau nei 15 metų patirties architektūriniame projektavime, vadovaujanti projektams visoje Europoje ir už jos ribų.",
+                teamEmiliaBio: "Specializuojasi kuriant harmoningas interjero erdves, kuriose estetiką derina su funkcionalumu.",
+                processIntro: "Mūsų projektavimo procesas remiasi giliu supratimu – konteksto, medžiagų, žmogaus patirties. Kiekvienas projektas prasideda nuo klausymosi: mūsų klientų, vietos, lūkesčių, kurie suformuos galutinį dizainą.",
+                processDiscovery: "Atradimas",
+                processDiscoveryText: "Kiekvieną projektą pradedame nuo išsamių tyrimų ir vietos analizės, suprasdami fizinį, kultūrinį ir emocinį kontekstą, kuriame dirbsime.",
+                processConcept: "Koncepcija",
+                processConceptText: "Nuo pradinių eskizų iki detalių studijų tiriame kelias kryptis, kol pasiekiame dizainą, kuris atrodo neišvengiamas – lyg jis negalėtų egzistuoti kitaip.",
+                processDevelopment: "Vystymas",
+                processDevelopmentText: "Griežtas techninis vystymas užtikrina, kad mūsų kūrybinė vizija būtų įgyvendinama, tvari ir atitiktų aukščiausius kokybės standartus.",
+                processRealization: "Realizacija",
+                processRealizationText: "Mes liekame giliai įsitraukę viso statybos proceso metu, užtikrindami, kad užbaigta erdvė atitiktų mūsų pradinio dizaino tikslumą ir rūpestį.",
+                contactsIntro: "Dėl projektų užklausų maloniai prašome kreiptis tiesiogiai.",
+                emailLabel: "El. paštas",
+                phoneLabel: "Telefonas",
+                addressLabel: "Adresas",
+                socialLabel: "Socialiniai tinklai"
+            },
+            FR: {
+                gallery: "Galerie",
+                about: "À propos",
+                process: "Processus",
+                contacts: "Contacts",
+                moreInfo: "Plus d'informations",
+                swipeImages: "← BALAYER POUR PLUS D'IMAGES →",
+                swipeProjects: "← BALAYER POUR PLUS DE PROJETS →",
+                credits: "© Bonatelier Spaces 2026",
+                aboutDescription: "bonatellierspaces est un studio d'architecture contemporaine fondé sur la conviction que les grands espaces naissent de l'intersection de l'innovation et des principes de conception intemporels. Nous concevons des environnements qui inspirent, fonctionnent magnifiquement et résistent à l'épreuve du temps.",
+                aboutPhilosophy: "Notre approche multidisciplinaire réunit l'architecture, le design d'intérieur et la pensée spatiale pour créer des solutions holistiques pour des projets résidentiels, commerciaux et culturels.",
+                teamAugustaBio: "Avec plus de 15 ans d'expérience en conception architecturale, menant des projets à travers l'Europe et au-delà.",
+                teamEmiliaBio: "Spécialisée dans la création d'espaces intérieurs harmonieux qui équilibrent l'esthétique et la fonctionnalité.",
+                processIntro: "Notre processus de conception est enraciné dans une compréhension profonde — du contexte, des matériaux, de l'expérience humaine. Chaque projet commence par l'écoute : de nos clients, du site, des aspirations qui façonneront le design final.",
+                processDiscovery: "Découverte",
+                processDiscoveryText: "Nous commençons chaque projet par une recherche approfondie et une analyse du site, comprenant le contexte physique, culturel et émotionnel dans lequel nous travaillerons.",
+                processConcept: "Concept",
+                processConceptText: "Des esquisses initiales aux études détaillées, nous explorons plusieurs directions avant d'arriver à un design qui semble inévitable — comme s'il ne pouvait exister autrement.",
+                processDevelopment: "Développement",
+                processDevelopmentText: "Un développement technique rigoureux garantit que notre vision créative est réalisable, durable et répond aux normes de qualité les plus élevées.",
+                processRealization: "Réalisation",
+                processRealizationText: "Nous restons profondément impliqués pendant la construction, en veillant à ce que l'espace fini corresponde à la précision et au soin de notre intention de conception originale.",
+                contactsIntro: "Pour toute demande de projet, n'hésitez pas à nous contacter directement.",
+                emailLabel: "E-mail",
+                phoneLabel: "Téléphone",
+                addressLabel: "Adresse",
+                socialLabel: "Social"
+            }
+        };
+
+        let currentLanguage = 'EN';
+
+        // ==========================================
         // GALLERY
         // ==========================================
         const projects = [
             {
                 folder: '1',
                 images: ['1.jpg', '986f3969-2132-494b-92ba-774ac0fc1845.jpg', 'f1559519-0758-4b0d-818c-bef1ef43d7ee.jpg', 'f29c80cc-753d-40e5-b78b-4ed96ff057c6.jpg'],
-                title: 'Residential Project',
-                location: 'Vilnius, Lithuania',
+                EN: {
+                    title: 'Residential Project',
+                    location: 'Vilnius, Lithuania',
+                    description: 'A contemporary residential project in the heart of Vilnius, merging historical context with modern minimalist aesthetics. The design focuses on light-filled spaces and honest materiality.'
+                },
+                LT: {
+                    title: 'Gyvenamasis projektas',
+                    location: 'Vilnius, Lietuva',
+                    description: 'Šiuolaikinis gyvenamasis projektas Vilniaus širdyje, jungiantis istorinį kontekstą su modernia minimalistine estetika. Dizainas orientuotas į šviesos pripildytas erdves ir sąžiningą medžiagiškumą.'
+                },
+                FR: {
+                    title: 'Projet Résidentiel',
+                    location: 'Vilnius, Lituanie',
+                    description: 'Un projet résidentiel contemporain au cœur de Vilnius, fusionnant le contexte historique et l\'esthétique minimaliste moderne. Le design se concentre sur des espaces baignés de lumière et une matérialité honnête.'
+                },
                 date: '2024—2025'
             },
             {
                 folder: '2',
                 images: ['1.jpg', '2.jpg', '3.jpg'],
-                title: 'Commercial Complex',
-                location: 'Kaunas, Lithuania',
+                EN: {
+                    title: 'Commercial Complex',
+                    location: 'Kaunas, Lithuania',
+                    description: 'An adaptive reuse office complex that revitalizes an industrial site. The project integrates sustainable systems while preserving the character of the original structure.'
+                },
+                LT: {
+                    title: 'Komercinės paskirties kompleksas',
+                    location: 'Kaunas, Lietuva',
+                    description: 'Adaptuotas biurų kompleksas, atgaivinantis pramoninę teritoriją. Projekte integruotos tvarios sistemos, išlaikant originalios struktūros charakterį.'
+                },
+                FR: {
+                    title: 'Complexe Commercial',
+                    location: 'Kaunas, Lituanie',
+                    description: 'Un complexe de bureaux à usage adaptatif qui revitalise un site industriel. Le projet intègre des systèmes durables tout en préservant le caractère de la structure d\'origine.'
+                },
                 date: '2023—2024'
             },
             {
                 folder: '3',
                 images: ['24479ad3-13f5-42b1-b4c2-93a476b3d9c1.jpg', 'b4884149-358d-45f7-9a6b-2e596a8bd97a.jpg'],
-                title: 'Project 3',
-                location: 'Location TBD',
+                EN: {
+                    title: 'Project 3',
+                    location: 'Location TBD',
+                    description: 'A conceptual study into modular housing solutions, exploring how prefabricated elements can create high-quality, adaptable urban living environments.'
+                },
+                LT: {
+                    title: 'Projektas 3',
+                    location: 'Vieta bus patikslinta',
+                    description: 'Koncepcinė modulinių būsto sprendimų studija, tirianti, kaip surenkami elementai gali sukurti aukštos kokybės, pritaikomą miesto gyvenamąją aplinką.'
+                },
+                FR: {
+                    title: 'Projet 3',
+                    location: 'Lieu à confirmer',
+                    description: 'Une étude conceptuelle sur les solutions de logement modulaires, explorant comment les éléments préfabriqués peuvent créer des environnements de vie urbains de haute qualité et adaptables.'
+                },
                 date: '2023'
             }
         ];
@@ -814,7 +1127,13 @@
                 project.images.forEach((img, imgIdx) => {
                     const slide = document.createElement('div');
                     slide.className = 'carousel-slide';
-                    slide.innerHTML = `<img src="gallery/${project.folder}/${img}" alt="${project.title} - Image ${imgIdx + 1}">`;
+                    const imageElement = document.createElement('img');
+                    imageElement.src = `gallery/${project.folder}/${img}`;
+                    imageElement.alt = `${project.title} - Image ${imgIdx + 1}`;
+                    imageElement.onload = () => {
+                        imageElement.classList.add('loaded');
+                    };
+                    slide.appendChild(imageElement);
                     horizontalTrack.appendChild(slide);
                 });
 
@@ -861,14 +1180,27 @@
                 });
             }
 
+
             updateCounter();
         }
 
         function updateProjectInfo() {
             const project = projects[currentProjectIndex];
-            projectTitle.textContent = project.title;
-            projectLocation.textContent = project.location;
+            const data = project[currentLanguage] || project.EN;
+
+            projectTitle.textContent = data.title;
+            projectLocation.textContent = data.location;
             projectDate.textContent = project.date;
+            projectDescriptionOverlay.textContent = data.description || '';
+
+            // Update Page Title
+            document.title = `${data.title} | bonatelier`;
+
+            // Update Meta Description
+            const metaDesc = document.getElementById('metaDescription');
+            if (metaDesc) {
+                metaDesc.setAttribute('content', data.description);
+            }
         }
 
         function updateCounter() {
@@ -881,6 +1213,9 @@
                 imageCounter.style.display = 'none';
             }
         }
+
+        const projectDescriptionOverlay = document.getElementById('projectDescriptionOverlay');
+        const toggleMoreInfoBtn = document.getElementById('toggleMoreInfo');
 
         function positionProjectInfo() {
             setTimeout(() => {
@@ -901,12 +1236,13 @@
                 }
 
                 const viewportHeight = getViewportHeight();
-                const maxWidth = window.innerWidth * 0.6;
+                const viewportWidth = window.innerWidth;
+                const maxWidth = viewportWidth * 0.6;
                 const maxHeight = viewportHeight * 0.75;
                 const imgRatio = img.naturalWidth / img.naturalHeight;
 
-                const isMobile = window.innerWidth <= 768;
-                const mobileMaxWidth = window.innerWidth * 0.9;
+                const isMobile = viewportWidth <= 768;
+                const mobileMaxWidth = viewportWidth * 0.9;
                 const mobileMaxHeight = viewportHeight * 0.5;
 
                 const effectiveMaxWidth = isMobile ? mobileMaxWidth : maxWidth;
@@ -921,10 +1257,67 @@
                     displayWidth = displayHeight * imgRatio;
                 }
 
-                const imageBottom = (viewportHeight - displayHeight) / 2 + displayHeight;
-                const bottomPosition = viewportHeight - imageBottom;
+                const imageCenterY = viewportHeight / 2;
+                const imageCenterX = viewportWidth / 2;
+                const imageTop = (viewportHeight - displayHeight) / 2;
+                const imageBottom = imageTop + displayHeight;
+                const imageRight = (viewportWidth + displayWidth) / 2;
+                const imageLeft = (viewportWidth - displayWidth) / 2;
 
-                projectInfo.style.bottom = `${Math.max(bottomPosition, 16)}px`;
+                if (isMobile) {
+                    projectInfo.style.left = '50%';
+                    projectInfo.style.right = 'auto';
+                    projectInfo.style.transform = 'translateX(-50%)';
+                    projectInfo.style.bottom = '60px';
+                    projectInfo.style.textAlign = 'center';
+
+                    imageCounter.style.left = '50%';
+                    imageCounter.style.right = 'auto';
+                    imageCounter.style.transform = 'translateX(-50%)';
+                    imageCounter.style.bottom = '24px';
+                } else {
+                    // Desktop Redesign Layout
+                    const rightPadding = 24;
+                    const logoWidth = 32;
+                    const spacing = 40;
+
+                    // Project Info - Closer to image, but safe from credits
+                    projectInfo.style.left = `${imageRight + 30}px`;
+                    projectInfo.style.right = 'auto';
+                    projectInfo.style.transform = 'none';
+                    // Ensure it doesn't overlap with credits (bottom: 24px)
+                    const infoTop = Math.min(imageBottom - 100, viewportHeight - 150);
+                    projectInfo.style.top = `${infoTop}px`;
+                    projectInfo.style.bottom = 'auto';
+                    projectInfo.style.textAlign = 'left';
+
+                    // Description Overlay - Centered vertically with image
+                    projectDescriptionOverlay.style.left = `${imageRight + 30}px`;
+                    projectDescriptionOverlay.style.top = `${imageCenterY}px`;
+                    projectDescriptionOverlay.style.transform = 'translateY(-50%)';
+
+                    // Counter - Aligned with "More information"
+                    imageCounter.style.left = 'auto';
+                    imageCounter.style.right = `${rightPadding}px`;
+                    imageCounter.style.top = `${infoTop + 74}px`; // Match More information baseline (adjusted +22px)
+                    imageCounter.style.bottom = 'auto';
+                    imageCounter.style.transform = 'none';
+
+                    // Horizontal scroll indicator (Swipe for images) - Centered at bottom
+                    // Position it just above the image bottom or closer to it
+                    const gap = 30; // Closer than the previous 60px
+                    scrollHorizontal.style.bottom = `${viewportHeight - imageBottom - gap}px`;
+                    scrollHorizontal.style.left = '50%';
+                    scrollHorizontal.style.transform = 'translateX(-50%)';
+
+                    // Vertical Indicator
+                    // Ensure it stays fixed via reset of JS overrides if any
+                    scrollVertical.style.right = '';
+                    scrollVertical.style.bottom = '';
+                    scrollVertical.style.left = '';
+                    scrollVertical.style.top = '';
+                    scrollVertical.style.transform = '';
+                }
             }, 100);
         }
 
@@ -941,6 +1334,11 @@
 
             document.addEventListener('keydown', handleKeydown);
             document.addEventListener('wheel', handleWheel, { passive: true });
+
+            toggleMoreInfoBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                projectDescriptionOverlay.classList.toggle('active');
+            });
 
             galleryPage.addEventListener('contextmenu', e => e.preventDefault());
 
@@ -1020,10 +1418,18 @@
             let projectChanged = false;
 
             if (Math.abs(dragDeltaX) > Math.abs(dragDeltaY) && Math.abs(dragDeltaX) > swipeThreshold) {
-                if (dragDeltaX > 0 && imageIndex > 0) {
-                    currentImageIndices[currentProjectIndex]--;
-                } else if (dragDeltaX < 0 && imageIndex < project.images.length - 1) {
-                    currentImageIndices[currentProjectIndex]++;
+                if (dragDeltaX > 0) {
+                    if (imageIndex > 0) {
+                        currentImageIndices[currentProjectIndex]--;
+                    } else {
+                        currentImageIndices[currentProjectIndex] = project.images.length - 1; // Loop to last
+                    }
+                } else if (dragDeltaX < 0) {
+                    if (imageIndex < project.images.length - 1) {
+                        currentImageIndices[currentProjectIndex]++;
+                    } else {
+                        currentImageIndices[currentProjectIndex] = 0; // Loop to first
+                    }
                 }
             } else if (Math.abs(dragDeltaY) > swipeThreshold) {
                 if (dragDeltaY > 0 && currentProjectIndex > 0) {
@@ -1064,18 +1470,22 @@
                 case 'ArrowRight':
                     if (imageIndex < project.images.length - 1) {
                         currentImageIndices[currentProjectIndex]++;
-                        updatePositions(true);
-                        updateGalleryHash();
-                        positionProjectInfo();
+                    } else {
+                        currentImageIndices[currentProjectIndex] = 0; // Loop to first
                     }
+                    updatePositions(true);
+                    updateGalleryHash();
+                    positionProjectInfo();
                     break;
                 case 'ArrowLeft':
                     if (imageIndex > 0) {
                         currentImageIndices[currentProjectIndex]--;
-                        updatePositions(true);
-                        updateGalleryHash();
-                        positionProjectInfo();
+                    } else {
+                        currentImageIndices[currentProjectIndex] = project.images.length - 1; // Loop to last
                     }
+                    updatePositions(true);
+                    updateGalleryHash();
+                    positionProjectInfo();
                     break;
                 case 'ArrowDown':
                     if (currentProjectIndex < projects.length - 1) {
@@ -1108,96 +1518,61 @@
         let wheelAccumulatorY = 0;
 
         // Cooldowns
-        const MOUSE_WHEEL_COOLDOWN = 50;   // Fast for discrete clicks
-        const TRACKPAD_COOLDOWN = 500;     // Slow for inertial streams
+        const MOUSE_WHEEL_COOLDOWN = 100;
+        const TRACKPAD_COOLDOWN = 300;     // Slightly faster for trackpad
         let currentCooldown = TRACKPAD_COOLDOWN;
 
+        let isNavigating = false;
         function handleWheel(e) {
             if (!document.getElementById('page-gallery').classList.contains('active')) return;
 
-            const now = Date.now();
+            const dx = e.deltaX;
+            const dy = e.deltaY;
 
-            // Normalize delta (convert lines to pixels if needed)
-            // deltaMode: 0 = pixels, 1 = lines, 2 = pages
-            let dx = e.deltaX;
-            let dy = e.deltaY;
-
-            if (e.deltaMode === 1) { // Lines
-                dx *= 40;
-                dy *= 40;
-            } else if (e.deltaMode === 2) { // Pages
-                dx *= 800;
-                dy *= 800;
-            }
-
-            // Detect input type heuristic
-            // Mouse wheels usually send larger discrete steps or deltaMode=1
-            // Trackpads send streams of small floats
-            const isMouseWheel = e.deltaMode === 1 || (Math.abs(dx) > 50 || Math.abs(dy) > 50);
-
-            if (isMouseWheel) {
-                currentCooldown = MOUSE_WHEEL_COOLDOWN;
-                // For mouse wheel, we don't accumulate, we take the raw impulse usually
-                // But let's use the same logic flow
-                wheelAccumulatorX += dx;
-                wheelAccumulatorY += dy;
-            } else {
-                currentCooldown = TRACKPAD_COOLDOWN;
-                wheelAccumulatorX += dx;
-                wheelAccumulatorY += dy;
-            }
-
-            if (now - lastWheelTime < currentCooldown) {
-                // If it's a mouse wheel, strictly block. 
-                // If trackpad, we might be in the tail, also block.
-                // Reset accumulators if we are blocking to prevent burst later?
-                // Actually, for trackpad, we want to ignore the tail.
-                // For mouse wheel, we want to allow rapid clicks but not faster than cooldown.
-                return;
-            }
-
-            // Threshold checking
-            const threshold = 30; // Min pixels to trigger nav
+            // Simple magnitude check
+            const threshold = 40;
+            if (isNavigating) return;
 
             let actionTaken = false;
             let projectChanged = false;
 
-            const project = projects[currentProjectIndex];
-            const imageIndex = currentImageIndices[currentProjectIndex];
-
-            // Horizontal
-            if (Math.abs(wheelAccumulatorX) > Math.abs(wheelAccumulatorY)) {
-                if (Math.abs(wheelAccumulatorX) > threshold) {
-                    if (wheelAccumulatorX > 0 && imageIndex < project.images.length - 1) {
-                        currentImageIndices[currentProjectIndex]++;
-                        actionTaken = true;
-                    } else if (wheelAccumulatorX < 0 && imageIndex > 0) {
-                        currentImageIndices[currentProjectIndex]--;
-                        actionTaken = true;
+            if (Math.abs(dx) > Math.abs(dy)) {
+                if (Math.abs(dx) > threshold) {
+                    const project = projects[currentProjectIndex];
+                    if (dx > 0) {
+                        if (currentImageIndices[currentProjectIndex] < project.images.length - 1) {
+                            currentImageIndices[currentProjectIndex]++;
+                            actionTaken = true;
+                        } else {
+                            currentImageIndices[currentProjectIndex] = 0; // Loop to first
+                            actionTaken = true;
+                        }
+                    } else if (dx < 0) {
+                        if (currentImageIndices[currentProjectIndex] > 0) {
+                            currentImageIndices[currentProjectIndex]--;
+                            actionTaken = true;
+                        } else {
+                            currentImageIndices[currentProjectIndex] = project.images.length - 1; // Loop to last
+                            actionTaken = true;
+                        }
                     }
-                    wheelAccumulatorX = 0; // Reset after action
-                    wheelAccumulatorY = 0;
                 }
-            }
-            // Vertical
-            else {
-                if (Math.abs(wheelAccumulatorY) > threshold) {
-                    if (wheelAccumulatorY > 0 && currentProjectIndex < projects.length - 1) {
+            } else {
+                if (Math.abs(dy) > threshold) {
+                    if (dy > 0 && currentProjectIndex < projects.length - 1) {
                         currentProjectIndex++;
                         projectChanged = true;
                         actionTaken = true;
-                    } else if (wheelAccumulatorY < 0 && currentProjectIndex > 0) {
+                    } else if (dy < 0 && currentProjectIndex > 0) {
                         currentProjectIndex--;
                         projectChanged = true;
                         actionTaken = true;
                     }
-                    wheelAccumulatorX = 0;
-                    wheelAccumulatorY = 0;
                 }
             }
 
             if (actionTaken) {
-                lastWheelTime = now;
+                isNavigating = true;
                 updatePositions(true);
                 updateGalleryHash();
 
@@ -1211,23 +1586,75 @@
                 } else {
                     positionProjectInfo();
                 }
-            } else {
-                // If no action taken (below threshold), decay accumulators or keep them?
-                // For trackpad, we might want to keep accumulating.
-                // But if too much time passes, reset.
-                if (now - lastWheelTime > 200) {
-                    wheelAccumulatorX = 0;
-                    wheelAccumulatorY = 0;
-                }
+
+                // Cooldown to prevent multiple triggers from one trackpad swipe
+                setTimeout(() => {
+                    isNavigating = false;
+                }, 600);
             }
         }
 
-        // ==========================================
-        // INITIALIZE
-        // ==========================================
-        initRouter();
-    </script>
 
+        // Language switcher logic
+        function setLanguage(event, lang) {
+            if (event) event.preventDefault();
+            currentLanguage = lang;
+
+            const content = translations[lang];
+            if (!content) return;
+
+            // Update all translate elements
+            document.querySelectorAll('.translate').forEach(element => {
+                const key = element.dataset.key;
+                if (content[key]) {
+                    element.textContent = content[key];
+                }
+            });
+
+            // Update language switcher active state
+            const links = document.querySelectorAll('.language-switcher a');
+            links.forEach(link => {
+                if (link.innerText === lang) {
+                    link.classList.add('active');
+                } else {
+                    link.classList.remove('active');
+                }
+            });
+
+            // Update project information if in gallery
+            if (document.getElementById('page-gallery').classList.contains('active')) {
+                updateProjectInfo();
+            }
+
+            console.log(`Language set to: ${lang}`);
+        }
+
+        // Custom Cursor Logic
+        const cursorDot = document.getElementById('cursorDot');
+        const cursorOutline = document.getElementById('cursorOutline');
+
+        window.addEventListener('mousemove', (e) => {
+            const posX = e.clientX;
+            const posY = e.clientY;
+
+            cursorDot.style.transform = `translate(${posX - 4}px, ${posY - 4}px)`;
+
+            // Outline follows with a slight delay
+            requestAnimationFrame(() => {
+                cursorOutline.style.left = `${posX}px`;
+                cursorOutline.style.top = `${posY}px`;
+            });
+        });
+
+        document.querySelectorAll('a, button, .project-more, .carousel-slide img, .team-member').forEach(link => {
+            link.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
+            link.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
+        });
+
+        // Initialize Router
+        initRouter();
+
+    </script>
 </body>
 
 </html>
