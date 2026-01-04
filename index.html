@@ -185,6 +185,16 @@
             .website-credits {
                 display: none;
             }
+
+            /* Use original logo on mobile */
+            .nav-logo-desktop,
+            .nav-logo-box {
+                display: none !important;
+            }
+
+            .nav-logo {
+                display: block !important;
+            }
         }
 
         /* Page Container */
@@ -487,14 +497,27 @@
             }
 
             .content-page {
-                padding: 80px 24px 40px 24px;
+                padding: 60px 24px 40px 24px;
             }
 
             .content-page h1 {
-                font-size: 1.4rem;
+                font-size: 1.1rem;
+                margin-bottom: 1.5rem;
             }
 
+            /* Mobile description overlay - centered, above image */
+            .project-description-overlay {
+                left: 50% !important;
+                right: auto !important;
+                top: 30% !important;
+                transform: translateX(-50%) translateY(-50%) !important;
+                max-width: 85vw;
+                text-align: center;
+            }
 
+            .project-description-overlay.active {
+                transform: translateX(-50%) translateY(-50%) !important;
+            }
 
             .team-grid {
                 grid-template-columns: repeat(2, 1fr);
@@ -1131,13 +1154,28 @@
                     const imageElement = document.createElement('img');
                     imageElement.src = `gallery/${project.folder}/${img}`;
                     imageElement.alt = `${project.title} - Image ${imgIdx + 1}`;
-                    imageElement.onload = () => {
-                        imageElement.classList.add('loaded');
+
+                    // Handle image loading with multiple fallbacks
+                    const markAsLoaded = () => {
+                        if (!imageElement.classList.contains('loaded')) {
+                            imageElement.classList.add('loaded');
+                        }
                     };
-                    // Handle cached images that don't fire onload
-                    if (imageElement.complete) {
-                        imageElement.classList.add('loaded');
+
+                    imageElement.onload = markAsLoaded;
+
+                    // Check if already cached/loaded
+                    if (imageElement.complete && imageElement.naturalWidth > 0) {
+                        markAsLoaded();
                     }
+
+                    // Fallback: force loaded class after a short delay
+                    setTimeout(() => {
+                        if (imageElement.complete || imageElement.naturalWidth > 0) {
+                            markAsLoaded();
+                        }
+                    }, 100);
+
                     slide.appendChild(imageElement);
                     horizontalTrack.appendChild(slide);
                 });
@@ -1151,6 +1189,12 @@
             const viewportHeight = getViewportHeight();
             const verticalOffset = -currentProjectIndex * viewportHeight;
             currentTranslateY = verticalOffset;
+
+            // Close description overlay when changing images/projects
+            const projectDescriptionOverlay = document.getElementById('projectDescriptionOverlay');
+            if (projectDescriptionOverlay && projectDescriptionOverlay.classList.contains('active')) {
+                projectDescriptionOverlay.classList.remove('active');
+            }
 
             if (!animate) {
                 verticalTrack.classList.add('dragging');
