@@ -572,8 +572,9 @@
         }
 
         .mobile-nav a {
+            font-family: Baskerville, 'Baskerville Old Face', 'Times New Roman', serif;
             font-size: 1.2rem;
-            font-weight: 300;
+            font-weight: 400;
             margin: 0.75rem 0;
             color: var(--text-secondary);
             transition: color 0.2s;
@@ -1133,6 +1134,10 @@
                     imageElement.onload = () => {
                         imageElement.classList.add('loaded');
                     };
+                    // Handle cached images that don't fire onload
+                    if (imageElement.complete) {
+                        imageElement.classList.add('loaded');
+                    }
                     slide.appendChild(imageElement);
                     horizontalTrack.appendChild(slide);
                 });
@@ -1286,7 +1291,7 @@
                     projectInfo.style.right = 'auto';
                     projectInfo.style.transform = 'none';
                     // Ensure it doesn't overlap with credits (bottom: 24px)
-                    const infoTop = Math.min(imageBottom - 100, viewportHeight - 150);
+                    const infoTop = Math.min(imageBottom - 100, viewportHeight - 150) + 12;
                     projectInfo.style.top = `${infoTop}px`;
                     projectInfo.style.bottom = 'auto';
                     projectInfo.style.textAlign = 'left';
