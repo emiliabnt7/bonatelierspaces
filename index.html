@@ -1190,21 +1190,32 @@
                     };
 
                     imageElement.onload = markAsLoaded;
+                    imageElement.onerror = markAsLoaded; // Even on error, show the element
 
                     // Check if already cached/loaded
                     if (imageElement.complete && imageElement.naturalWidth > 0) {
                         markAsLoaded();
                     }
 
-                    // Fallback: force loaded class after a short delay
+                    slide.appendChild(imageElement);
+                    horizontalTrack.appendChild(slide);
+
+                    // Check again after DOM insertion with multiple delays
+                    requestAnimationFrame(() => {
+                        if (imageElement.complete || imageElement.naturalWidth > 0) {
+                            markAsLoaded();
+                        }
+                    });
+
                     setTimeout(() => {
                         if (imageElement.complete || imageElement.naturalWidth > 0) {
                             markAsLoaded();
                         }
-                    }, 100);
+                    }, 200);
 
-                    slide.appendChild(imageElement);
-                    horizontalTrack.appendChild(slide);
+                    setTimeout(() => {
+                        markAsLoaded(); // Force it after 1 second regardless
+                    }, 1000);
                 });
 
                 projectRow.appendChild(horizontalTrack);
@@ -1413,7 +1424,13 @@
 
             toggleMoreInfoBtn.addEventListener('click', (e) => {
                 e.preventDefault();
-                projectDescriptionOverlay.classList.toggle('active');
+                e.stopPropagation();
+                const overlay = document.getElementById('projectDescriptionOverlay');
+                if (overlay.classList.contains('active')) {
+                    overlay.classList.remove('active');
+                } else {
+                    overlay.classList.add('active');
+                }
             });
 
             galleryPage.addEventListener('contextmenu', e => e.preventDefault());
