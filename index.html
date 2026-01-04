@@ -187,12 +187,11 @@
             }
 
             /* Use original logo on mobile */
-            .nav-logo-desktop,
-            .nav-logo-box {
+            .nav-logo-desktop {
                 display: none !important;
             }
 
-            /* Mobile logo - top right corner */
+            /* Mobile logo - top left corner */
             .nav-logo {
                 display: none !important;
             }
@@ -201,7 +200,7 @@
                 display: block !important;
                 position: fixed;
                 top: 24px;
-                right: 24px;
+                left: 24px;
                 height: 32px;
                 width: auto;
                 z-index: 1100;
@@ -519,22 +518,35 @@
 
             .content-page h1 {
                 font-size: 1.1rem;
-                margin-top: 20px;
+                margin-top: 32px;
                 margin-bottom: 1.5rem;
             }
 
-            /* Mobile description overlay - centered, above image */
+            /* Mobile description overlay - centered on top of image with backdrop */
             .project-description-overlay {
                 left: 50% !important;
                 right: auto !important;
-                top: 30% !important;
+                top: 50% !important;
                 transform: translateX(-50%) translateY(-50%) !important;
                 max-width: 85vw;
                 text-align: center;
+                background-color: rgba(253, 252, 251, 0.95);
+                padding: 24px;
+                border-radius: 8px;
+                z-index: 2000;
             }
 
             .project-description-overlay.active {
                 transform: translateX(-50%) translateY(-50%) !important;
+            }
+
+            /* Dim the image when overlay is active */
+            .carousel-slide img {
+                transition: opacity 0.4s ease;
+            }
+
+            body:has(.project-description-overlay.active) .carousel-slide img {
+                opacity: 0.1;
             }
 
             .team-grid {
