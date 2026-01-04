@@ -192,8 +192,25 @@
                 display: none !important;
             }
 
+            /* Mobile logo - top right corner */
             .nav-logo {
+                display: none !important;
+            }
+
+            .nav-logo-box {
                 display: block !important;
+                position: fixed;
+                top: 24px;
+                right: 24px;
+                height: 32px;
+                width: auto;
+                z-index: 1100;
+            }
+
+            /* Mobile page titles */
+            .menu-title,
+            .project-title {
+                margin-top: 20px;
             }
         }
 
@@ -502,6 +519,7 @@
 
             .content-page h1 {
                 font-size: 1.1rem;
+                margin-top: 20px;
                 margin-bottom: 1.5rem;
             }
 
@@ -683,7 +701,7 @@
             <img src="Text Logo BR.png" alt="bonatelier" class="nav-logo-desktop">
         </a>
     </nav>
-    <img src="Box Logo BR.png" alt="logo" class="nav-logo-box">
+    <img src="logo.png" alt="logo" class="nav-logo-box">
 
     <!-- Desktop Menu -->
     <div class="menu">
