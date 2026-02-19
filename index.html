@@ -649,6 +649,15 @@
             transition: transform 0.1s ease;
         }
 
+        /* White cursor while landing page is visible */
+        body.on-landing .cursor-dot {
+            background-color: rgba(255, 255, 255, 0.85);
+        }
+
+        body.on-landing .cursor-outline {
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
         .cursor-outline {
             width: 20px;
             height: 20px;
@@ -733,8 +742,9 @@
                 flex-direction: column;
                 justify-content: space-between;
                 align-items: flex-start;
-                padding: 0 5vw 0 0;
-                margin-left: -10px;
+                padding: 0 5vw 0 46px;
+                /* 46px = chevron(36px) + 10px breathing room */
+                margin-left: 0;
                 z-index: 5;
                 pointer-events: none;
             }
@@ -780,9 +790,9 @@
             .landing-carousel-wrapper {
                 position: absolute;
                 left: 80px;
-                /* after left arrow + 30px extra gap */
-                right: 70px;
-                /* before right arrow + 30px extra gap */
+                /* after left arrow */
+                right: 12px;
+                /* symmetric visual gap on right */
                 top: 0;
                 bottom: 0;
                 overflow: hidden;
@@ -792,7 +802,7 @@
 
             .landing-carousel-track {
                 display: flex;
-                gap: 10px;
+                gap: 20px;
                 will-change: transform;
             }
 
@@ -826,6 +836,14 @@
                 justify-content: center;
                 opacity: 1;
                 cursor: default;
+            }
+
+            /* Right chevron inside info panel — same left edge as logo */
+            .landing-info>.landing-chevron {
+                position: absolute;
+                left: 0;
+                top: 50%;
+                transform: translateY(-50%);
             }
 
             .landing-chevron svg {
@@ -885,7 +903,7 @@
             @media (max-width: 768px) {
                 .landing-info {
                     width: 35%;
-                    padding: 0 3vw 0 15px;
+                    padding: 0 3vw 0 40px;
                 }
 
                 .landing-logo {
@@ -902,7 +920,7 @@
             }
         </style>
 
-        <!-- Left: carousel + arrows -->
+        <!-- Left: carousel + left arrow -->
         <div class="landing-carousel-area" id="landingCarouselArea">
 
             <!-- Left arrow zone + chevron -->
@@ -917,18 +935,19 @@
             <div class="landing-carousel-wrapper" id="landingCarouselWrapper">
                 <div class="landing-carousel-track" id="landingCarouselTrack"></div>
             </div>
+        </div>
 
-            <!-- Right arrow zone + chevron -->
-            <div class="landing-chevron chevron-right" id="landingChevronRight">
+        <!-- Right info panel (right chevron is first child, left-edge aligned with logo) -->
+        <div class="landing-info" id="landingInfo">
+            <!-- Right arrow zone + chevron: left: 0 → aligns with logo left edge -->
+            <div class="landing-arrow-zone right" id="landingArrowRight" style="top:0;bottom:0;left:0;width:46px;">
+            </div>
+            <div class="landing-chevron" id="landingChevronRight"
+                style="position:absolute;left:0;top:50%;transform:translateY(-50%)">
                 <svg viewBox="0 0 10 20">
                     <polyline points="2,1 8,10 2,19" />
                 </svg>
             </div>
-            <div class="landing-arrow-zone right" id="landingArrowRight"></div>
-        </div>
-
-        <!-- Right info panel -->
-        <div class="landing-info" id="landingInfo">
             <img src="Text Logo BR.png" alt="bonatelier" class="landing-logo">
             <div>
                 <span class="landing-divider-line"></span>
@@ -939,7 +958,7 @@
 
     <!-- Navigation -->
     <nav class="nav">
-        <a href="#gallery">
+        <a href="#" id="navLogoLink">
             <img src="Text Logo BR.png" alt="bonatellierspaces" class="nav-logo">
             <img src="Text Logo BR.png" alt="bonatelier" class="nav-logo-desktop">
         </a>
@@ -2025,7 +2044,7 @@
             function getItemWidth() {
                 const first = track.querySelector('.landing-carousel-item');
                 if (!first) return 200;
-                return first.offsetWidth + 10; // gap = 10px
+                return first.offsetWidth + 20; // gap = 20px
             }
 
             function setOffset(val) {
@@ -2056,31 +2075,33 @@
                 clearInterval(hoverInterval);
             }
 
-            // Arrow zones control scroll and chevron visibility
-            arrowLeft.addEventListener('mouseenter', () => {
-                chevLeft.classList.add('visible');
-                startHoverScroll(-1);
-            });
-            arrowLeft.addEventListener('mouseleave', () => {
-                chevLeft.classList.remove('visible');
-                stopHoverScroll();
-            });
-            arrowRight.addEventListener('mouseenter', () => {
-                chevRight.classList.add('visible');
-                startHoverScroll(1);
-            });
-            arrowRight.addEventListener('mouseleave', () => {
-                chevRight.classList.remove('visible');
-                stopHoverScroll();
-            });
+            // Arrow zones control scroll speed
+            arrowLeft.addEventListener('mouseenter', () => startHoverScroll(-1));
+            arrowLeft.addEventListener('mouseleave', stopHoverScroll);
+            arrowRight.addEventListener('mouseenter', () => startHoverScroll(1));
+            arrowRight.addEventListener('mouseleave', stopHoverScroll);
 
-            // Enter site on click anywhere
+            // Show/hide landing page
+            function showLanding() {
+                isEntering = false;
+                offset = 0;
+                track.style.transform = 'translateX(0)';
+                landingEl.style.display = '';
+                requestAnimationFrame(() => {
+                    landingEl.classList.remove('hidden');
+                });
+                document.body.classList.add('on-landing');
+                startAutoScroll();
+            }
+
+            // Enter site on click anywhere on landing page
             function enterSite() {
                 if (isEntering) return;
                 isEntering = true;
                 clearInterval(autoScrollInterval);
                 clearInterval(hoverInterval);
                 landingEl.classList.add('hidden');
+                document.body.classList.remove('on-landing');
                 window.location.hash = '#gallery';
                 setTimeout(() => { landingEl.style.display = 'none'; }, 900);
             }
@@ -2091,7 +2112,17 @@
                 enterSite();
             });
 
-            // Init
+            // Nav logo → back to landing page
+            const navLogoLink = document.getElementById('navLogoLink');
+            if (navLogoLink) {
+                navLogoLink.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    showLanding();
+                });
+            }
+
+            // Init — mark body as on-landing for white cursor
+            document.body.classList.add('on-landing');
             track.style.transition = 'none';
             track.style.transform = 'translateX(0)';
             setTimeout(startAutoScroll, 150);
