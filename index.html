@@ -744,7 +744,7 @@
                 align-items: flex-start;
                 padding: 0 5vw 0 46px;
                 /* 46px = chevron(36px) + 10px breathing room */
-                margin-left: 0;
+                margin-left: -30px;
                 z-index: 5;
                 pointer-events: none;
             }
@@ -899,23 +899,52 @@
 
             /* centred in 70px right gap */
 
-            /* Mobile */
+            /* Mobile: column layout, logo only centered above carousel */
             @media (max-width: 768px) {
+                #landing-page {
+                    flex-direction: column;
+                    align-items: center;
+                    justify-content: center;
+                    gap: 5vh;
+                }
+
                 .landing-info {
-                    width: 35%;
-                    padding: 0 3vw 0 40px;
+                    order: -1;
+                    width: 100%;
+                    height: auto;
+                    padding: 0;
+                    margin: 0;
+                    align-items: center;
+                    justify-content: center;
+                }
+
+                .landing-info>.landing-arrow-zone,
+                .landing-info>.landing-chevron,
+                .landing-arrow-zone.left,
+                .landing-chevron.chevron-left,
+                .landing-tagline,
+                .landing-divider-line {
+                    display: none;
                 }
 
                 .landing-logo {
                     width: 130px;
                 }
 
-                .landing-tagline {
-                    font-size: 0.85rem;
+                .landing-carousel-area {
+                    flex: none;
+                    width: 100%;
+                    margin-left: 0;
+                    height: 45vh;
+                }
+
+                .landing-carousel-wrapper {
+                    left: 20px;
+                    right: 20px;
                 }
 
                 :root {
-                    --carousel-h: 33vh;
+                    --carousel-h: 40vh;
                 }
             }
         </style>
@@ -2019,8 +2048,8 @@
                 });
             });
 
-            // Build carousel items (duplicate for seamless loop)
-            const imageSet = [...allImages, ...allImages];
+            // Build carousel items (triple for seamless bidirectional loop)
+            const imageSet = [...allImages, ...allImages, ...allImages];
             imageSet.forEach(src => {
                 const item = document.createElement('div');
                 item.className = 'landing-carousel-item';
@@ -2031,7 +2060,7 @@
                 track.appendChild(item);
             });
 
-            // Set carousel height via CSS var (54vh default)
+            // Set carousel height via CSS var
             document.documentElement.style.setProperty('--carousel-h', '46vh');
 
             // Carousel state
@@ -2047,10 +2076,12 @@
                 return first.offsetWidth + 20; // gap = 20px
             }
 
+            // Keep offset in the "middle copy" [single, 2*single)
+            // so both left and right directions have room to loop.
             function setOffset(val) {
-                const half = allImages.length * getItemWidth();
-                if (val >= half) val -= half;
-                if (val <= -half) val += half;
+                const single = allImages.length * getItemWidth();
+                if (val >= 2 * single) val -= single;
+                if (val < single) val += single;
                 offset = val;
                 track.style.transform = `translateX(${-offset}px)`;
             }
@@ -2121,11 +2152,17 @@
                 });
             }
 
-            // Init — mark body as on-landing for white cursor
+            // Init — mark body as on-landing for white cursor, then start at middle copy
             document.body.classList.add('on-landing');
             track.style.transition = 'none';
-            track.style.transform = 'translateX(0)';
-            setTimeout(startAutoScroll, 150);
+            // Wait for images to render so getItemWidth() returns real sizes,
+            // then jump to the middle copy so left AND right arrows loop correctly.
+            setTimeout(() => {
+                const single = allImages.length * getItemWidth();
+                offset = single;
+                track.style.transform = `translateX(${-single}px)`;
+                startAutoScroll();
+            }, 300);
         })();
 
         // Initialize Router
