@@ -439,12 +439,34 @@
             color: var(--text-primary);
         }
 
-        /* Process two-column layout */
-        .process-columns {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 3rem;
-            margin-top: 1.5rem;
+        /* Process single column layout */
+        .process-block {
+            max-width: 460px;
+            margin: 0 auto;
+            text-align: justify;
+            display: flex;
+            flex-direction: column;
+            color: #000;
+        }
+
+        .process-block p {
+            font-size: 0.65rem;
+            font-weight: 300;
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+            color: #000;
+        }
+
+        .process-block h1 {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            margin-bottom: 2.5rem;
+            color: var(--text-primary);
+            text-align: left;
+            /* Keep title left aligned relative to block */
         }
 
         .process-left p,
@@ -452,10 +474,11 @@
             max-width: 100%;
         }
 
+        /* Mobile adjustments for process */
         @media (max-width: 768px) {
-            .process-columns {
-                grid-template-columns: 1fr;
-                gap: 1.5rem;
+            .process-block {
+                width: 100%;
+                padding: 0 20px;
             }
         }
 
@@ -514,7 +537,10 @@
             line-height: 1.85;
             color: #000;
             text-align: justify;
-            width: 100%;
+            width: calc(100% - 193px);
+            /* Match width of bio text (460 - 165 - 28) */
+            margin-left: 193px;
+            /* Offset to align with bio text */
             margin-bottom: 2.5rem;
         }
 
@@ -560,6 +586,17 @@
             max-width: 280px;
             margin: 0 auto;
             color: #000;
+        }
+
+        .contact-block h1 {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            margin-bottom: 2.5rem;
+            color: var(--text-primary);
+            text-align: left;
         }
 
         .contact-block p {
@@ -1234,36 +1271,32 @@
          ========================================== -->
     <main class="page" id="page-process">
         <div class="content-page process-layout">
-            <h1><span class="translate" data-key="process">PROCESS</span></h1>
-            <div class="process-columns">
-                <div class="process-left">
-                    <p>We stand against trend-led minimalism through material honesty and craft. At the heart of
-                        Bonatelier is the idea that timelessness is not an aesthetic style but an outcome that emerges
-                        from identity. Our role is to gently articulate it, allowing it to crystallize both around the
-                        existing elements of a space and the unique character of its users.</p>
-                    <p>Contrast is our main design tool. We are drawn to interiors where opposites coexist: contemporary
-                        with antique, new with used, polished with patinated, scientific with organic, curated with
-                        authentic. We deliberately leave room for the slightly strange, the ornamented, or the
-                        non-rational: elements that cannot be explained by functional logic alone, yet resonate with the
-                        space or the people in it. This is where an interior gains depth, memory, and emotional
-                        permanence.</p>
-                    <p>Our interiors are minimal in gesture, yet rich in thought, materiality, and texture. Elegance
-                        emerges from functionality, proportion, and balance, rather than excess.</p>
-                    <p>We favor the reuse of materials and objects, repairing and adapting wherever possible. This often
-                        leads to non-standard solutions that require care, time, and craftsmanship, such as furniture
-                        reupholstering, restoration, or bespoke details. We see this as a way to slow down design, to
-                        resist disposability, and to add meaning to the everyday.</p>
-                    <p>Trust is central to our approach. We guide our clients through the different steps of the process
-                        while offering a rounded service, from technical planning to the implementation of both hard and
-                        soft interior finishes.</p>
-                </div>
-                <div class="process-right">
-                    <p>We offer <u><strong>full-scope interior projects</strong></u> from hard and soft finishes through
-                        to decor and implementation. Our practice also offers <u><strong>consultations</strong></u>,
-                        including in the context of <u>real estate purchases or sales</u>, addressing questions of
-                        potential, value, transformation, and long-term use.</p>
-                    <p>Contact us directly for more information.</p>
-                </div>
+            <div class="process-block">
+                <h1><span class="translate" data-key="process">PROCESS</span></h1>
+                <p>We stand against trend-led minimalism through material honesty and craft. At the heart of
+                    Bonatelier is the idea that timelessness is not an aesthetic style but an outcome that emerges
+                    from identity. Our role is to gently articulate it, allowing it to crystallize both around the
+                    existing elements of a space and the unique character of its users.</p>
+                <p>Contrast is our main design tool. We are drawn to interiors where opposites coexist: contemporary
+                    with antique, new with used, polished with patinated, scientific with organic, curated with
+                    authentic. We deliberately leave room for the slightly strange, the ornamented, or the
+                    non-rational: elements that cannot be explained by functional logic alone, yet resonate with the
+                    space or the people in it. This is where an interior gains depth, memory, and emotional
+                    permanence.</p>
+                <p>Our interiors are minimal in gesture, yet rich in thought, materiality, and texture. Elegance
+                    emerges from functionality, proportion, and balance, rather than excess.</p>
+                <p>We favor the reuse of materials and objects, repairing and adapting wherever possible. This often
+                    leads to non-standard solutions that require care, time, and craftsmanship, such as furniture
+                    reupholstering, restoration, or bespoke details. We see this as a way to slow down design, to
+                    resist disposability, and to add meaning to the everyday.</p>
+                <p>Trust is central to our approach. We guide our clients through the different steps of the process
+                    while offering a rounded service, from technical planning to the implementation of both hard and
+                    soft interior finishes.</p>
+                <p>We offer <u><strong>full-scope interior projects</strong></u> from hard and soft finishes through
+                    to decor and implementation. Our practice also offers <u><strong>consultations</strong></u>,
+                    including in the context of <u>real estate purchases or sales</u>, addressing questions of
+                    potential, value, transformation, and long-term use.</p>
+                <p>Contact us directly for more information.</p>
             </div>
         </div>
     </main>
@@ -1273,9 +1306,8 @@
          ========================================== -->
     <main class="page" id="page-contacts">
         <div class="content-page">
-            <h1><span class="translate" data-key="contacts">CONTACT</span></h1>
-
             <div class="contact-block">
+                <h1><span class="translate" data-key="contacts">CONTACT</span></h1>
                 <p class="translate" data-key="contactsIntro">
                     For project enquiries, please reach out to us directly.
                 </p>
