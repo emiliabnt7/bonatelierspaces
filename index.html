@@ -368,15 +368,15 @@
 
         /* Scroll hints: only visible on gallery page */
         .scroll-indicator {
-            display: none;
+            display: none !important;
         }
 
         body.on-gallery .scroll-horizontal {
-            display: flex;
+            display: flex !important;
         }
 
         body.on-gallery .scroll-vertical {
-            display: flex;
+            display: flex !important;
         }
 
         /* Horizontal navigation hint */
@@ -699,10 +699,49 @@
                 opacity: 0.1;
             }
 
-            .team-grid {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 1.5rem;
+            /* Mobile nav logo: mirrors hamburger position (top:24px, right:24px) */
+            .nav {
+                padding: 24px 24px 24px 24px;
+                /* top-left matches hamburger top-right */
             }
+
+            /* Mobile about: stack photo above bio */
+            .about-block {
+                max-width: 100%;
+                margin: 0;
+                width: 100%;
+            }
+
+            .about-person {
+                grid-template-columns: 1fr;
+            }
+
+            .about-person-photo {
+                width: 100%;
+                height: auto;
+                aspect-ratio: 1;
+            }
+
+            /* Uniform justified text on mobile */
+            .content-page p,
+            .about-intro,
+            .about-person-bio,
+            .process-block p,
+            .contact-block p {
+                text-align: justify;
+                max-width: 100%;
+            }
+
+            .process-block {
+                max-width: 100%;
+                width: 100%;
+            }
+
+            .contact-block {
+                max-width: 100%;
+                width: 100%;
+            }
+
         }
 
 
@@ -775,9 +814,11 @@
         }
 
         .mobile-nav a {
-            font-family: Baskerville, 'Baskerville Old Face', 'Times New Roman', serif;
-            font-size: 1.2rem;
-            font-weight: 400;
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            font-size: 0.75rem;
+            font-weight: 300;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
             margin: 0.75rem 0;
             color: var(--text-secondary);
             transition: color 0.2s;
@@ -786,6 +827,7 @@
         .mobile-nav a:hover,
         .mobile-nav a.active {
             color: var(--text-primary);
+            font-weight: 500;
         }
 
         /* Custom Cursor */
@@ -1011,7 +1053,7 @@
                 stroke-linejoin: round;
             }
 
-            /* Hover zones — thin vertical bands */
+            /* Hover zones — thin vertical bands — always interactive */
             .landing-arrow-zone {
                 position: absolute;
                 top: 0;
@@ -1021,6 +1063,9 @@
                 display: flex;
                 align-items: center;
                 justify-content: center;
+                pointer-events: all;
+                /* override parent landing-info pointer-events:none */
+                cursor: default;
             }
 
             .landing-arrow-zone.left {
@@ -1226,10 +1271,10 @@
     </div>
     <div class="scroll-indicator scroll-vertical" id="scrollVertical">
         <svg viewBox="0 0 10 18">
-            <polyline points="1,2 5,9 1,16" />
+            <polyline points="2,14 5,4 8,14" />
         </svg>
         <svg viewBox="0 0 10 18">
-            <polyline points="7,2 3,9 7,16" />
+            <polyline points="2,4 5,14 8,4" />
         </svg>
     </div>
 
@@ -1244,23 +1289,20 @@
 
                 <!-- Intro paragraph — full block width, justified -->
                 <p class="about-intro">Bonatelier was founded in 2023 in Delft, the Netherlands, where Augusta and
-                    Emilia
-                    met during their common Master of Architecture. Bound by a shared interest in detail-oriented, slow
-                    architecture and a desire to bring a more sensitive approach to the field, they created Bonatelier
-                    as
-                    a unifying platform for projects across scales – from material research and furniture design to
-                    full-scale interior projects.</p>
+                    Emilia met during their common Master of Architecture. Bound by a shared interest in small-scale,
+                    slow architecture, and the desire to support a considerate approach to design, they created
+                    Bonatelier as a unifying platform for projects across scales – from material research and furniture
+                    design to full-scale interior projects.</p>
 
                 <!-- Emilia row: photo left | bio right -->
                 <div class="about-person">
                     <img src="assets/Emilia square.png" alt="Emilia" class="about-person-photo">
                     <p class="about-person-bio translate" data-key="teamEmiliaBio"><span
                             class="person-name">Emilia</span> was born to a Lithuanian mother and a French father, and
-                        grew up between
-                        Luxembourg, Belgium, Paris, and Vilnius before studying architecture in the Netherlands.
-                        Experiencing different cultures and homes from an early age shaped her sensitivity to space,
-                        identity, and belonging, and informs her approach to working with existing buildings and used
-                        materials to create personal interiors.</p>
+                        grew up between Luxembourg, Belgium, Paris, and Vilnius before studying architecture in the
+                        Netherlands. Experiencing different cultures and homes from an early age shaped her sensitivity
+                        to the concepts of identity and belonging, and informs her approach to working with existing
+                        buildings and used materials to create personal interiors.</p>
                 </div>
 
                 <!-- Augusta row: photo left | bio right -->
@@ -1290,25 +1332,24 @@
                     Bonatelier is the idea that timelessness is not an aesthetic style but an outcome that emerges
                     from identity. Our role is to gently articulate it, allowing it to crystallize both around the
                     existing elements of a space and the unique character of its users.</p>
-                <p>Contrast is our main design tool. We are drawn to interiors where opposites coexist: contemporary
+                <p>We are drawn to interiors where opposites coexist: contemporary
                     with antique, new with used, polished with patinated, scientific with organic, curated with
                     authentic. We deliberately leave room for the slightly strange, the ornamented, or the
                     non-rational: elements that cannot be explained by functional logic alone, yet resonate with the
                     space or the people in it. This is where an interior gains depth, memory, and emotional
                     permanence.</p>
-                <p>Our interiors are minimal in gesture, yet rich in thought, materiality, and texture. Elegance
-                    emerges from functionality, proportion, and balance, rather than excess.</p>
+                <p>Our interiors are minimal in gesture, yet rich in texture. We strive for functionality,
+                    elegance and balance, rather than excess.</p>
                 <p>We favor the reuse of materials and objects, repairing and adapting wherever possible. This often
                     leads to non-standard solutions that require care, time, and craftsmanship, such as furniture
                     reupholstering, restoration, or bespoke details. We see this as a way to slow down design, to
                     resist disposability, and to add meaning to the everyday.</p>
-                <p>Trust is central to our approach. We guide our clients through the different steps of the process
-                    while offering a rounded service, from technical planning to the implementation of both hard and
-                    soft interior finishes.</p>
-                <p>We offer <u><strong>full-scope interior projects</strong></u> from hard and soft finishes through
-                    to decor and implementation. Our practice also offers <u><strong>consultations</strong></u>,
-                    including in the context of <u>real estate purchases or sales</u>, addressing questions of
-                    potential, value, transformation, and long-term use.</p>
+                <p>Trust is central to our approach. We offer <u><strong>full-scope interior projects</strong></u>
+                    from technical planning through to decor and implementation. Our practice also offers
+                    <u><strong>consultations</strong></u>, including in the context of
+                    <u>real estate purchases or sales</u>, addressing questions of potential, value, transformation,
+                    and long-term use.
+                </p>
                 <p>Contact us directly for more information.</p>
             </div>
         </div>
