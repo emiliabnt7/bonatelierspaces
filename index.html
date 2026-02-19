@@ -381,11 +381,20 @@
             pointer-events: none;
         }
 
-        .scroll-horizontal svg,
-        .scroll-vertical svg {
+        .scroll-horizontal svg {
             width: 7px;
             height: 12px;
-            /* 75% of 9×16 */
+            stroke: var(--text-primary);
+            stroke-width: 1;
+            fill: none;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .scroll-vertical svg {
+            width: 5px;
+            height: 9px;
+            /* 75% of 7×12 */
             stroke: var(--text-primary);
             stroke-width: 1;
             fill: none;
@@ -396,8 +405,8 @@
         /* Vertical navigation hint — two V chevrons left of gallery images */
         .scroll-vertical {
             position: fixed;
-            left: 110px;
-            /* left edge of carousel area */
+            left: 410px;
+            /* 110 + 300 */
             top: 50%;
             transform: translateY(-50%);
             z-index: 1000;
