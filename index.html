@@ -63,7 +63,8 @@
             top: 0;
             left: 0;
             z-index: 1000;
-            padding: 24px;
+            padding: 24px 24px 24px 54px;
+            /* left=54px shifts logo 30px right */
         }
 
         .nav-logo {
@@ -84,8 +85,8 @@
 
             .nav-logo-desktop {
                 display: block;
-                height: 38px;
-                /* ×1.2 of previous 32px */
+                height: 29px;
+                /* 75% of 38px */
                 width: auto;
             }
         }
@@ -93,8 +94,10 @@
         /* Menu - Top left under logo */
         .menu {
             position: fixed;
-            top: calc(25vh + 100px);
-            left: 24px;
+            top: calc(25vh + 115px);
+            /* +15px lower */
+            left: 54px;
+            /* 30px further right */
             z-index: 1000;
         }
 
@@ -131,7 +134,8 @@
 
         .menu-list a:hover,
         .menu-list a.active {
-            font-weight: 700;
+            font-weight: 500;
+            /* medium */
             opacity: 1;
         }
 
@@ -139,7 +143,8 @@
         .language-switcher {
             position: fixed;
             bottom: 24px;
-            left: 24px;
+            left: 54px;
+            /* 30px further right */
             z-index: 1000;
             display: flex;
             gap: 12px;
@@ -166,11 +171,11 @@
         .website-credits {
             position: fixed;
             bottom: 24px;
-            right: 24px;
+            right: 64px;
+            /* shifted 40px left */
             z-index: 1100;
             font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
             font-size: 0.49rem;
-            /* 75% of 0.65rem */
             font-weight: 100;
             color: var(--text-primary);
             opacity: 0.5;
@@ -189,10 +194,10 @@
                 display: none !important;
             }
 
-            /* Mobile logo - top left corner - same height as desktop (38px) */
+            /* Mobile logo - 75% of 38px = 29px, position inherited from .nav padding */
             .nav-logo {
                 display: block !important;
-                height: 38px;
+                height: 29px;
                 width: auto;
             }
 
@@ -370,16 +375,17 @@
             z-index: 1000;
             display: flex;
             align-items: center;
-            gap: 82px;
-            /* 32 + 50 */
+            gap: 112px;
+            /* 82 + 30 */
             opacity: 0.4;
             pointer-events: none;
         }
 
         .scroll-horizontal svg,
         .scroll-vertical svg {
-            width: 9px;
-            height: 16px;
+            width: 7px;
+            height: 12px;
+            /* 75% of 9×16 */
             stroke: var(--text-primary);
             stroke-width: 1;
             fill: none;
@@ -397,8 +403,8 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 72px;
-            /* 22 + 50 */
+            gap: 102px;
+            /* 72 + 30 */
             opacity: 0.4;
             pointer-events: none;
         }
