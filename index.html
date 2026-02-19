@@ -715,7 +715,6 @@
                 background: #200d0d;
                 display: flex;
                 align-items: center;
-                cursor: none !important;
                 transition: opacity 0.8s cubic-bezier(0.2, 0, 0.2, 1);
             }
 
@@ -724,7 +723,7 @@
                 pointer-events: none;
             }
 
-            /* Left info panel — ~30% width, empty zone */
+            /* Right info panel — ~30% width */
             .landing-info {
                 position: relative;
                 flex-shrink: 0;
@@ -734,20 +733,20 @@
                 flex-direction: column;
                 justify-content: space-between;
                 align-items: flex-start;
-                padding: 0 0 0 6vw;
+                padding: 0 6vw 0 4vw;
                 z-index: 5;
                 pointer-events: none;
             }
 
             .landing-logo {
-                width: 130px;
+                width: 195px;
                 filter: brightness(0) invert(1);
                 display: block;
             }
 
             .landing-tagline {
                 font-family: Baskerville, 'Baskerville Old Face', 'Times New Roman', serif;
-                font-size: 0.72rem;
+                font-size: 1.44rem;
                 color: rgba(255, 255, 255, 0.65);
                 line-height: 1.65;
                 font-weight: 400;
@@ -799,7 +798,7 @@
                 filter: brightness(0.9);
             }
 
-            /* V-shaped chevron arrows flanking the carousel */
+            /* V-shaped chevron arrows flanking the carousel — always visible */
             .landing-chevron {
                 position: absolute;
                 top: 50%;
@@ -810,9 +809,8 @@
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                opacity: 0;
-                transition: opacity 0.3s ease;
-                cursor: none;
+                opacity: 1;
+                cursor: default;
             }
 
             .landing-chevron svg {
@@ -851,7 +849,7 @@
                 opacity: 1;
             }
 
-            /* Trigger chevron visibility on zone hover via JS */
+            /* Trigger chevron visibility on zone hover via JS — always visible now */
             .landing-chevron.visible {
                 opacity: 1;
             }
@@ -868,15 +866,15 @@
             @media (max-width: 768px) {
                 .landing-info {
                     width: 35%;
-                    padding-left: 4vw;
+                    padding: 0 3vw 0 2vw;
                 }
 
                 .landing-logo {
-                    width: 100px;
+                    width: 140px;
                 }
 
                 .landing-tagline {
-                    font-size: 0.6rem;
+                    font-size: 1rem;
                 }
 
                 :root {
@@ -885,13 +883,7 @@
             }
         </style>
 
-        <!-- Left info panel -->
-        <div class="landing-info" id="landingInfo">
-            <img src="Text Logo BR.png" alt="bonatelier" class="landing-logo">
-            <div class="landing-tagline">Architecture and design studio,<br>based in Vilnius, Lithuania.</div>
-        </div>
-
-        <!-- Right: carousel + arrows -->
+        <!-- Left: carousel + arrows -->
         <div class="landing-carousel-area" id="landingCarouselArea">
 
             <!-- Left arrow zone + chevron -->
@@ -914,6 +906,12 @@
                 </svg>
             </div>
             <div class="landing-arrow-zone right" id="landingArrowRight"></div>
+        </div>
+
+        <!-- Right info panel -->
+        <div class="landing-info" id="landingInfo">
+            <img src="Text Logo BR.png" alt="bonatelier" class="landing-logo">
+            <div class="landing-tagline">Architecture and design studio,<br>based in Vilnius, Lithuania.</div>
         </div>
     </div>
 
