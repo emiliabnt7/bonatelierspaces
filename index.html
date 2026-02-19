@@ -131,6 +131,7 @@
 
         .menu-list a:hover,
         .menu-list a.active {
+            font-weight: 700;
             opacity: 1;
         }
 
@@ -168,7 +169,8 @@
             right: 24px;
             z-index: 1100;
             font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-            font-size: 0.65rem;
+            font-size: 0.49rem;
+            /* 75% of 0.65rem */
             font-weight: 100;
             color: var(--text-primary);
             opacity: 0.5;
@@ -187,10 +189,10 @@
                 display: none !important;
             }
 
-            /* Mobile logo - top left corner - Box Logo BR.png at 29px (70% of 42px) */
+            /* Mobile logo - top left corner - same height as desktop (38px) */
             .nav-logo {
                 display: block !important;
-                height: 29px;
+                height: 38px;
                 width: auto;
             }
 
@@ -355,8 +357,8 @@
         }
 
         .image-counter {
-            display: none;
-            /* hidden per design */
+            display: none !important;
+            /* permanently hidden */
         }
 
         /* Horizontal navigation hint — two mirrored V chevrons at bottom-center */
@@ -368,15 +370,16 @@
             z-index: 1000;
             display: flex;
             align-items: center;
-            gap: 32px;
+            gap: 82px;
+            /* 32 + 50 */
             opacity: 0.4;
             pointer-events: none;
         }
 
         .scroll-horizontal svg,
         .scroll-vertical svg {
-            width: 8px;
-            height: 14px;
+            width: 9px;
+            height: 16px;
             stroke: var(--text-primary);
             stroke-width: 1;
             fill: none;
@@ -394,7 +397,8 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 22px;
+            gap: 72px;
+            /* 22 + 50 */
             opacity: 0.4;
             pointer-events: none;
         }
@@ -1664,14 +1668,7 @@
         }
 
         function updateCounter() {
-            const project = projects[currentProjectIndex];
-            const imageIndex = currentImageIndices[currentProjectIndex];
-            if (project.images.length > 1) {
-                imageCounter.textContent = `${imageIndex + 1} / ${project.images.length}`;
-                imageCounter.style.display = 'block';
-            } else {
-                imageCounter.style.display = 'none';
-            }
+            // image counter is permanently hidden — no display toggling
         }
 
         const projectDescriptionOverlay = document.getElementById('projectDescriptionOverlay');
