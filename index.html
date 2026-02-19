@@ -63,8 +63,8 @@
             top: 0;
             left: 0;
             z-index: 1000;
-            padding: 44px 24px 24px 54px;
-            /* top=44: logo 20px lower */
+            padding: 44px 24px 24px 44px;
+            /* left=44: 10px further left */
         }
 
         .nav-logo {
@@ -95,9 +95,8 @@
         .menu {
             position: fixed;
             top: calc(25vh + 115px);
-            /* +15px lower */
-            left: 54px;
-            /* 30px further right */
+            left: 44px;
+            /* 10px further left */
             z-index: 1000;
         }
 
@@ -143,9 +142,8 @@
         .language-switcher {
             position: fixed;
             bottom: 44px;
-            /* 20px higher */
-            left: 54px;
-            /* 30px further right */
+            left: 44px;
+            /* 10px further left */
             z-index: 1000;
             display: flex;
             gap: 12px;
@@ -395,10 +393,11 @@
             stroke-linejoin: round;
         }
 
-        /* Vertical navigation hint — two mirrored V chevrons on right side */
+        /* Vertical navigation hint — two V chevrons left of gallery images */
         .scroll-vertical {
             position: fixed;
-            right: 20px;
+            left: 110px;
+            /* left edge of carousel area */
             top: 50%;
             transform: translateY(-50%);
             z-index: 1000;
@@ -406,7 +405,6 @@
             flex-direction: column;
             align-items: center;
             gap: 102px;
-            /* 72 + 30 */
             opacity: 0.4;
             pointer-events: none;
         }
@@ -566,6 +564,8 @@
             line-height: 1.85;
             color: #000;
             text-align: justify;
+            margin-top: -3px;
+            /* shift bio up 3px */
         }
 
         .about-person-bio .person-name {
@@ -581,7 +581,8 @@
         .contact-block {
             display: flex;
             flex-direction: column;
-            max-width: 280px;
+            max-width: 460px;
+            /* matches about/process width */
             margin: 0 auto;
             color: #000;
         }
@@ -897,12 +898,14 @@
 
             .landing-tagline {
                 font-family: Baskerville, 'Baskerville Old Face', 'Times New Roman', serif;
-                font-size: 1.08rem;
+                font-size: 0.81rem;
+                /* 75% of 1.08rem */
                 color: rgba(255, 255, 255, 1);
                 line-height: 1.65;
                 font-weight: 400;
                 position: relative;
                 top: 10px;
+                width: 75%;
             }
 
             /* Thin white divider above tagline */
@@ -2268,12 +2271,8 @@
                 track.style.transform = `translateX(${-offset}px)`;
             }
 
-            // Auto-scroll
-            function startAutoScroll() {
-                autoScrollInterval = setInterval(() => {
-                    if (!isHoveringArrow) setOffset(offset + 0.5);
-                }, 16);
-            }
+            // Auto-scroll disabled — carousel is static, arrow hover only
+            function startAutoScroll() { /* no-op */ }
 
             // Arrow hover scroll
             function startHoverScroll(dir) {
