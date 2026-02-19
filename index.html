@@ -703,6 +703,185 @@
     <div class="cursor-dot" id="cursorDot"></div>
     <div class="cursor-outline" id="cursorOutline"></div>
 
+    <!-- ==========================================
+         LANDING PAGE
+         ========================================== -->
+    <div id="landing-page">
+        <style>
+            #landing-page {
+                position: fixed;
+                inset: 0;
+                z-index: 9999;
+                background: #200d0d;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                cursor: none !important;
+                transition: opacity 0.8s cubic-bezier(0.2, 0, 0.2, 1);
+            }
+
+            #landing-page.hidden {
+                opacity: 0;
+                pointer-events: none;
+            }
+
+            /* Arrow zones */
+            .landing-arrow-zone {
+                position: absolute;
+                top: 0;
+                bottom: 0;
+                width: 12%;
+                z-index: 10;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .landing-arrow-zone.left {
+                left: 0;
+            }
+
+            .landing-arrow-zone.right {
+                right: 0;
+            }
+
+            .landing-arrow {
+                color: rgba(255, 255, 255, 0.5);
+                font-size: 1.1rem;
+                font-family: 'Helvetica Neue', sans-serif;
+                font-weight: 300;
+                letter-spacing: 0.05em;
+                opacity: 0;
+                transition: opacity 0.3s ease;
+                pointer-events: none;
+                user-select: none;
+            }
+
+            .landing-arrow-zone:hover .landing-arrow {
+                opacity: 1;
+            }
+
+            /* Carousel */
+            .landing-carousel-wrapper {
+                position: absolute;
+                left: 0;
+                right: 0;
+                top: 0;
+                bottom: 0;
+                overflow: hidden;
+                display: flex;
+                align-items: center;
+            }
+
+            .landing-carousel-track {
+                display: flex;
+                gap: 12px;
+                transition: transform 0.6s cubic-bezier(0.2, 0, 0.2, 1);
+                will-change: transform;
+                padding: 0 2vw;
+            }
+
+            .landing-carousel-item {
+                flex-shrink: 0;
+                height: 54vh;
+                width: auto;
+                overflow: hidden;
+                border-radius: 1px;
+            }
+
+            .landing-carousel-item img {
+                height: 100%;
+                width: auto;
+                display: block;
+                object-fit: cover;
+                pointer-events: none;
+                user-select: none;
+                filter: brightness(0.92);
+            }
+
+            /* Right panel: logo + tagline */
+            .landing-info {
+                position: absolute;
+                right: 4vw;
+                top: 50%;
+                transform: translateY(-50%);
+                display: flex;
+                flex-direction: column;
+                align-items: flex-start;
+                z-index: 5;
+                pointer-events: none;
+                width: 160px;
+            }
+
+            .landing-logo {
+                width: 140px;
+                margin-bottom: 1.4rem;
+                filter: brightness(0) invert(1);
+            }
+
+            .landing-divider {
+                width: 100%;
+                height: 1px;
+                background: rgba(255, 255, 255, 0.35);
+                margin-bottom: 1rem;
+            }
+
+            .landing-tagline {
+                font-family: Baskerville, 'Baskerville Old Face', 'Times New Roman', serif;
+                font-size: 0.72rem;
+                color: rgba(255, 255, 255, 0.7);
+                line-height: 1.6;
+                font-weight: 400;
+            }
+
+            /* Mobile adjustments */
+            @media (max-width: 768px) {
+                .landing-carousel-item {
+                    height: 40vh;
+                }
+
+                .landing-info {
+                    right: 3vw;
+                    width: 120px;
+                }
+
+                .landing-logo {
+                    width: 110px;
+                }
+
+                .landing-tagline {
+                    font-size: 0.62rem;
+                }
+
+                .landing-arrow-zone {
+                    width: 16%;
+                }
+            }
+        </style>
+
+        <!-- Left arrow zone -->
+        <div class="landing-arrow-zone left" id="landingArrowLeft">
+            <span class="landing-arrow">←</span>
+        </div>
+
+        <!-- Carousel -->
+        <div class="landing-carousel-wrapper" id="landingCarouselWrapper">
+            <div class="landing-carousel-track" id="landingCarouselTrack"></div>
+        </div>
+
+        <!-- Right panel -->
+        <div class="landing-info">
+            <img src="Text Logo BR.png" alt="bonatelier" class="landing-logo">
+            <div class="landing-divider"></div>
+            <div class="landing-tagline">Architecture and design studio,<br>based in Vilnius, Lithuania.</div>
+        </div>
+
+        <!-- Right arrow zone -->
+        <div class="landing-arrow-zone right" id="landingArrowRight">
+            <span class="landing-arrow">→</span>
+        </div>
+    </div>
+
     <!-- Navigation -->
     <nav class="nav">
         <a href="#gallery">
@@ -1737,6 +1916,123 @@
             link.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
             link.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
         });
+
+        // ==========================================
+        // LANDING PAGE
+        // ==========================================
+        (function () {
+            const landingEl = document.getElementById('landing-page');
+            const track = document.getElementById('landingCarouselTrack');
+            const arrowLeft = document.getElementById('landingArrowLeft');
+            const arrowRight = document.getElementById('landingArrowRight');
+
+            if (!landingEl || !track) return;
+
+            // Collect all images from all projects (in order)
+            const allImages = [];
+            projects.forEach(proj => {
+                proj.images.forEach(img => {
+                    allImages.push(`gallery/${proj.folder}/${img}`);
+                });
+            });
+
+            // Build carousel items (duplicate for seamless loop)
+            const imageSet = [...allImages, ...allImages]; // double for looping
+            imageSet.forEach(src => {
+                const item = document.createElement('div');
+                item.className = 'landing-carousel-item';
+                const img = document.createElement('img');
+                img.src = src;
+                img.draggable = false;
+                item.appendChild(img);
+                track.appendChild(item);
+            });
+
+            // Carousel state
+            let offset = 0;
+            let itemWidth = 0;
+            let totalOrigWidth = 0;
+            let autoScrollInterval = null;
+            let isHoveringArrow = false;
+            let hoverDirection = 0;
+            let hoverInterval = null;
+            let isEntering = false;
+
+            function getItemWidth() {
+                const first = track.querySelector('.landing-carousel-item');
+                if (!first) return 200;
+                return first.offsetWidth + 12; // 12 = gap
+            }
+
+            function setOffset(val, animate) {
+                // Seamless loop: reset when past halfway
+                const half = allImages.length * getItemWidth();
+                if (val >= half) val -= half;
+                if (val <= -half) val += half;
+                offset = val;
+                track.style.transition = animate ? 'transform 0.6s cubic-bezier(0.2,0,0.2,1)' : 'none';
+                track.style.transform = `translateX(${-offset}px)`;
+            }
+
+            // Auto-scroll (slow drift right)
+            function startAutoScroll() {
+                autoScrollInterval = setInterval(() => {
+                    if (!isHoveringArrow) setOffset(offset + 0.4, false);
+                }, 16);
+            }
+
+            // Arrow hover: faster scroll in that direction
+            function startHoverScroll(dir) {
+                isHoveringArrow = true;
+                hoverDirection = dir;
+                hoverInterval = setInterval(() => {
+                    setOffset(offset + dir * 3.5, false);
+                }, 16);
+            }
+
+            function stopHoverScroll() {
+                isHoveringArrow = false;
+                clearInterval(hoverInterval);
+                hoverInterval = null;
+            }
+
+            arrowLeft.addEventListener('mouseenter', () => startHoverScroll(-1));
+            arrowLeft.addEventListener('mouseleave', stopHoverScroll);
+            arrowRight.addEventListener('mouseenter', () => startHoverScroll(1));
+            arrowRight.addEventListener('mouseleave', stopHoverScroll);
+
+            // Enter site on click anywhere
+            function enterSite() {
+                if (isEntering) return;
+                isEntering = true;
+                clearInterval(autoScrollInterval);
+                clearInterval(hoverInterval);
+                landingEl.classList.add('hidden');
+                // Navigate to gallery
+                window.location.hash = '#gallery';
+                setTimeout(() => {
+                    landingEl.style.display = 'none';
+                }, 900);
+            }
+
+            landingEl.addEventListener('click', enterSite);
+
+            // Also enter on any key press
+            document.addEventListener('keydown', function onKey(e) {
+                document.removeEventListener('keydown', onKey);
+                enterSite();
+            });
+
+            // Init after images can load
+            setTimeout(() => {
+                itemWidth = getItemWidth();
+                // Start offset in middle to allow looping both ways
+                offset = 0;
+                track.style.transition = 'none';
+                track.style.transform = `translateX(0)`;
+                startAutoScroll();
+            }, 100);
+        })();
 
         // Initialize Router
         initRouter();
