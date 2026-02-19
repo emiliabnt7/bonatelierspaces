@@ -381,21 +381,10 @@
             pointer-events: none;
         }
 
-        .scroll-horizontal svg {
-            width: 6px;
-            height: 10px;
-            /* 80% of 7×12 */
-            stroke: var(--text-primary);
-            stroke-width: 1;
-            fill: none;
-            stroke-linecap: round;
-            stroke-linejoin: round;
-        }
-
+        .scroll-horizontal svg,
         .scroll-vertical svg {
             width: 7px;
             height: 12px;
-            /* same as horizontal */
             stroke: var(--text-primary);
             stroke-width: 1;
             fill: none;
@@ -1216,11 +1205,11 @@
         </div>
         <!-- Vertical nav hint: up chevron + down chevron -->
         <div class="scroll-indicator scroll-vertical" id="scrollVertical">
-            <svg viewBox="0 0 18 10" style="width:18px;height:10px">
-                <polyline points="1,9 9,1 17,9" />
+            <svg viewBox="0 0 10 18">
+                <polyline points="1,2 5,9 1,16" />
             </svg>
-            <svg viewBox="0 0 18 10" style="width:18px;height:10px">
-                <polyline points="1,1 9,9 17,1" />
+            <svg viewBox="0 0 10 18">
+                <polyline points="7,2 3,9 7,16" />
             </svg>
         </div>
     </main>
