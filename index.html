@@ -728,28 +728,30 @@
                 position: relative;
                 flex-shrink: 0;
                 width: 30%;
-                height: var(--carousel-h, 54vh);
+                height: var(--carousel-h, 46vh);
                 display: flex;
                 flex-direction: column;
                 justify-content: space-between;
                 align-items: flex-start;
-                padding: 0 6vw 0 4vw;
+                padding: 0 5vw 0 20px;
                 z-index: 5;
                 pointer-events: none;
             }
 
             .landing-logo {
-                width: 195px;
+                width: 175px;
                 filter: brightness(0) invert(1);
                 display: block;
             }
 
             .landing-tagline {
                 font-family: Baskerville, 'Baskerville Old Face', 'Times New Roman', serif;
-                font-size: 1.44rem;
+                font-size: 1.08rem;
                 color: rgba(255, 255, 255, 0.65);
                 line-height: 1.65;
                 font-weight: 400;
+                position: relative;
+                top: 5px;
             }
 
             /* Right carousel area — ~70% width */
@@ -764,8 +766,10 @@
 
             .landing-carousel-wrapper {
                 position: absolute;
-                left: 0;
-                right: 0;
+                left: 50px;
+                /* after left arrow */
+                right: 40px;
+                /* before right arrow */
                 top: 0;
                 bottom: 0;
                 overflow: hidden;
@@ -777,13 +781,11 @@
                 display: flex;
                 gap: 10px;
                 will-change: transform;
-                padding-left: 40px;
-                /* space for left arrow */
             }
 
             .landing-carousel-item {
                 flex-shrink: 0;
-                height: var(--carousel-h, 54vh);
+                height: var(--carousel-h, 46vh);
                 width: auto;
                 overflow: hidden;
             }
@@ -854,31 +856,35 @@
                 opacity: 1;
             }
 
+            /* Chevron positions — outside the carousel image area */
             .landing-chevron.chevron-left {
-                left: 6px;
+                left: 12px;
             }
 
+            /* within 50px left gap */
             .landing-chevron.chevron-right {
-                right: 6px;
+                right: 8px;
             }
+
+            /* within 40px right margin */
 
             /* Mobile */
             @media (max-width: 768px) {
                 .landing-info {
                     width: 35%;
-                    padding: 0 3vw 0 2vw;
+                    padding: 0 3vw 0 15px;
                 }
 
                 .landing-logo {
-                    width: 140px;
+                    width: 130px;
                 }
 
                 .landing-tagline {
-                    font-size: 1rem;
+                    font-size: 0.85rem;
                 }
 
                 :root {
-                    --carousel-h: 38vh;
+                    --carousel-h: 33vh;
                 }
             }
         </style>
@@ -1991,7 +1997,7 @@
             });
 
             // Set carousel height via CSS var (54vh default)
-            document.documentElement.style.setProperty('--carousel-h', '54vh');
+            document.documentElement.style.setProperty('--carousel-h', '46vh');
 
             // Carousel state
             let offset = 0;
