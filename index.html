@@ -84,7 +84,8 @@
 
             .nav-logo-desktop {
                 display: block;
-                height: 32px;
+                height: 38px;
+                /* ×1.2 of previous 32px */
                 width: auto;
             }
         }
@@ -118,17 +119,18 @@
         }
 
         .menu-list a {
-            font-family: Baskerville, 'Baskerville Old Face', 'Times New Roman', serif;
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
             font-size: 0.85rem;
-            font-weight: 400;
+            font-weight: 300;
             letter-spacing: 0.02em;
-            color: var(--text-secondary);
-            transition: color 0.2s;
+            color: var(--text-primary);
+            opacity: 0.5;
+            transition: opacity 0.2s;
         }
 
         .menu-list a:hover,
         .menu-list a.active {
-            color: var(--text-primary);
+            opacity: 1;
         }
 
         /* Language Switcher - Bottom left */
@@ -179,20 +181,11 @@
                 display: none !important;
             }
 
-            /* Mobile logo - top left corner */
+            /* Mobile logo - top left corner - Box Logo BR.png at 42px */
             .nav-logo {
-                display: none !important;
-            }
-
-            .nav-logo-box {
                 display: block !important;
-                position: fixed;
-                top: 9px;
-                left: 24px;
-                height: 32px;
+                height: 42px;
                 width: auto;
-                z-index: 1100;
-                content: url('logo.png');
             }
 
             /* Mobile page titles */
@@ -362,36 +355,44 @@
             z-index: 1000;
         }
 
+        /* Horizontal navigation hint — two mirrored V chevrons at bottom-center */
         .scroll-horizontal {
             position: fixed;
-            bottom: 24px;
+            bottom: 20px;
             left: 50%;
             transform: translateX(-50%);
             z-index: 1000;
-            font-size: 0.6rem;
-            font-weight: 300;
-            letter-spacing: 0.05em;
-            color: var(--text-secondary);
-            text-transform: uppercase;
-            opacity: 0.5;
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            opacity: 0.45;
             pointer-events: none;
         }
 
+        .scroll-horizontal svg,
+        .scroll-vertical svg {
+            width: 10px;
+            height: 18px;
+            stroke: var(--text-primary);
+            stroke-width: 1.2;
+            fill: none;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        /* Vertical navigation hint — two mirrored V chevrons on right side */
         .scroll-vertical {
             position: fixed;
-            right: 24px;
+            right: 20px;
             top: 50%;
-            transform: translate(50%, -50%) rotate(90deg);
-            transform-origin: center center;
+            transform: translateY(-50%);
             z-index: 1000;
-            font-size: 0.6rem;
-            font-weight: 300;
-            letter-spacing: 0.05em;
-            color: var(--text-secondary);
-            text-transform: uppercase;
-            opacity: 0.5;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 14px;
+            opacity: 0.45;
             pointer-events: none;
-            white-space: nowrap;
         }
 
         /* ========================================
@@ -1097,10 +1098,24 @@
 
         <div class="image-counter" id="imageCounter"></div>
 
-        <div class="scroll-indicator scroll-horizontal translate" id="scrollHorizontal" data-key="swipeImages">← SWIPE
-            FOR MORE IMAGES →</div>
-        <div class="scroll-indicator scroll-vertical translate" id="scrollVertical" data-key="swipeProjects">← SWIPE FOR
-            MORE PROJECTS →</div>
+        <!-- Horizontal nav hint: left chevron + right chevron -->
+        <div class="scroll-indicator scroll-horizontal" id="scrollHorizontal">
+            <svg viewBox="0 0 10 18">
+                <polyline points="8,1 2,9 8,17" />
+            </svg>
+            <svg viewBox="0 0 10 18">
+                <polyline points="2,1 8,9 2,17" />
+            </svg>
+        </div>
+        <!-- Vertical nav hint: up chevron + down chevron -->
+        <div class="scroll-indicator scroll-vertical" id="scrollVertical">
+            <svg viewBox="0 0 10 18">
+                <polyline points="1,8 9,2 17,8" />
+            </svg>
+            <svg viewBox="0 0 10 18">
+                <polyline points="1,10 9,16 17,10" />
+            </svg>
+        </div>
     </main>
 
     <!-- Mobile gallery lightbox -->
