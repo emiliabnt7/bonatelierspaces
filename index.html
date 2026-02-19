@@ -63,8 +63,8 @@
             top: 0;
             left: 0;
             z-index: 1000;
-            padding: 24px 24px 24px 54px;
-            /* left=54px shifts logo 30px right */
+            padding: 44px 24px 24px 54px;
+            /* top=44: logo 20px lower */
         }
 
         .nav-logo {
@@ -142,7 +142,8 @@
         /* Language Switcher - Bottom left */
         .language-switcher {
             position: fixed;
-            bottom: 24px;
+            bottom: 44px;
+            /* 20px higher */
             left: 54px;
             /* 30px further right */
             z-index: 1000;
@@ -170,7 +171,8 @@
         /* Credits - Bottom right */
         .website-credits {
             position: fixed;
-            bottom: 24px;
+            bottom: 44px;
+            /* 20px higher */
             right: 64px;
             /* shifted 40px left */
             z-index: 1100;
@@ -502,7 +504,7 @@
             flex-direction: column;
             align-items: flex-start;
             width: fit-content;
-            max-width: 560px;
+            max-width: 460px;
             margin: 0 auto;
         }
 
@@ -518,7 +520,7 @@
 
         .about-person {
             display: grid;
-            grid-template-columns: 220px 1fr;
+            grid-template-columns: 165px 1fr;
             gap: 28px;
             width: 100%;
             margin-bottom: 2.5rem;
@@ -526,8 +528,8 @@
         }
 
         .about-person-photo {
-            width: 220px;
-            height: 220px;
+            width: 165px;
+            height: 165px;
             object-fit: cover;
             object-position: center top;
             display: block;
@@ -1186,9 +1188,9 @@
          ========================================== -->
     <main class="page" id="page-about">
         <div class="content-page">
-            <h1><span class="translate" data-key="about">ABOUT</span></h1>
 
             <div class="about-block">
+                <h1><span class="translate" data-key="about">ABOUT</span></h1>
 
                 <!-- Intro paragraph — full block width, justified -->
                 <p class="about-intro">Bonatelier was founded in 2023 in Delft, the Netherlands, where Augusta and
