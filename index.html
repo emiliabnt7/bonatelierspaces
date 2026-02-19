@@ -366,7 +366,20 @@
             /* permanently hidden */
         }
 
-        /* Horizontal navigation hint — two mirrored V chevrons at bottom-center */
+        /* Scroll hints: only visible on gallery page */
+        .scroll-indicator {
+            display: none;
+        }
+
+        body.on-gallery .scroll-horizontal {
+            display: flex;
+        }
+
+        body.on-gallery .scroll-vertical {
+            display: flex;
+        }
+
+        /* Horizontal navigation hint */
         .scroll-horizontal {
             position: fixed;
             bottom: 20px;
@@ -1194,30 +1207,30 @@
 
         <div class="image-counter" id="imageCounter"></div>
 
-        <!-- Horizontal nav hint: left chevron + right chevron -->
-        <div class="scroll-indicator scroll-horizontal" id="scrollHorizontal">
-            <svg viewBox="0 0 10 18">
-                <polyline points="8,1 2,9 8,17" />
-            </svg>
-            <svg viewBox="0 0 10 18">
-                <polyline points="2,1 8,9 2,17" />
-            </svg>
-        </div>
-        <!-- Vertical nav hint: up chevron + down chevron -->
-        <div class="scroll-indicator scroll-vertical" id="scrollVertical">
-            <svg viewBox="0 0 10 18">
-                <polyline points="1,2 5,9 1,16" />
-            </svg>
-            <svg viewBox="0 0 10 18">
-                <polyline points="7,2 3,9 7,16" />
-            </svg>
-        </div>
     </main>
 
     <!-- Mobile gallery lightbox -->
     <div id="gallery-lightbox">
         <span id="gallery-lightbox-close">&times;</span>
         <img id="gallery-lightbox-img" src="" alt="">
+    </div>
+
+    <!-- Nav scroll hints: outside all pages so fixed-position is never clipped -->
+    <div class="scroll-indicator scroll-horizontal" id="scrollHorizontal">
+        <svg viewBox="0 0 10 18">
+            <polyline points="8,1 2,9 8,17" />
+        </svg>
+        <svg viewBox="0 0 10 18">
+            <polyline points="2,1 8,9 2,17" />
+        </svg>
+    </div>
+    <div class="scroll-indicator scroll-vertical" id="scrollVertical">
+        <svg viewBox="0 0 10 18">
+            <polyline points="1,2 5,9 1,16" />
+        </svg>
+        <svg viewBox="0 0 10 18">
+            <polyline points="7,2 3,9 7,16" />
+        </svg>
     </div>
 
     <!-- ==========================================
@@ -1351,6 +1364,13 @@
                 const targetPage = document.getElementById(`page-${pageId}`);
                 if (targetPage) {
                     targetPage.classList.add('active');
+                }
+
+                // Toggle gallery body class so scroll hints are visible only on gallery
+                if (pageId === 'gallery') {
+                    document.body.classList.add('on-gallery');
+                } else {
+                    document.body.classList.remove('on-gallery');
                 }
 
                 // Update active nav links
