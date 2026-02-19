@@ -550,6 +550,30 @@
         }
 
         /* Keep process-columns unchanged */
+
+        /* ===== CONTACTS PAGE ===== */
+        .contact-block {
+            display: flex;
+            flex-direction: column;
+            max-width: 280px;
+            margin: 0 auto;
+            color: #000;
+        }
+
+        .contact-block p {
+            max-width: 100%;
+            color: #000;
+        }
+
+        .contact-label {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            font-weight: 500;
+            /* medium */
+            font-size: 0.65rem;
+            display: block;
+            margin-bottom: 2px;
+        }
+
         /* ========================================
            MOBILE ADJUSTMENTS
            ======================================== */
@@ -1248,28 +1272,32 @@
     <main class="page" id="page-contacts">
         <div class="content-page">
             <h1><span class="translate" data-key="contacts">CONTACT</span></h1>
-            <p class="translate" data-key="contactsIntro">
-                For project enquiries, please reach out to us directly.
-            </p>
-            <p>
-                <strong class="translate" data-key="emailLabel">Email</strong><br>
-                <a href="mailto:ae.bonatelier@gmail.com" style="text-decoration: underline;">ae.bonatelier@gmail.com</a>
-            </p>
-            <p>
-                <strong class="translate" data-key="phoneLabel">Phone</strong><br>
-                +370 63357983
-            </p>
-            <p>
-                <strong class="translate" data-key="addressLabel">Address</strong><br>
-                Gelų g. 4, 01137, Vilnius
-            </p>
-            <p>
-                <strong class="translate" data-key="socialLabel">Socials</strong><br>
-                <a href="https://www.instagram.com/bonatelierspaces/" target="_blank"
-                    style="text-decoration: underline;">Instagram</a><br>
-                <a href="https://ca.pinterest.com/spacesbybonatelier/" target="_blank"
-                    style="text-decoration: underline;">Pinterest</a>
-            </p>
+
+            <div class="contact-block">
+                <p class="translate" data-key="contactsIntro">
+                    For project enquiries, please reach out to us directly.
+                </p>
+                <p>
+                    <strong class="contact-label translate" data-key="emailLabel">Email</strong>
+                    <a href="mailto:ae.bonatelier@gmail.com"
+                        style="text-decoration: underline;">ae.bonatelier@gmail.com</a>
+                </p>
+                <p>
+                    <strong class="contact-label translate" data-key="phoneLabel">Phone</strong>
+                    +370 63357983
+                </p>
+                <p>
+                    <strong class="contact-label translate" data-key="addressLabel">Address</strong>
+                    Gelų g. 4, 01137, Vilnius
+                </p>
+                <p>
+                    <strong class="contact-label translate" data-key="socialLabel">Socials</strong>
+                    <a href="https://www.instagram.com/bonatelierspaces/" target="_blank"
+                        style="text-decoration: underline;">Instagram</a><br>
+                    <a href="https://ca.pinterest.com/spacesbybonatelier/" target="_blank"
+                        style="text-decoration: underline;">Pinterest</a>
+                </p>
+            </div>
         </div>
     </main>
 
