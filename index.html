@@ -733,7 +733,8 @@
                 flex-direction: column;
                 justify-content: space-between;
                 align-items: flex-start;
-                padding: 0 5vw 0 20px;
+                padding: 0 5vw 0 0;
+                margin-left: -10px;
                 z-index: 5;
                 pointer-events: none;
             }
@@ -754,7 +755,7 @@
                 top: 5px;
             }
 
-            /* Right carousel area — ~70% width */
+            /* Left carousel area — shifted 100px right from page edge */
             .landing-carousel-area {
                 position: relative;
                 flex: 1;
@@ -762,14 +763,15 @@
                 display: flex;
                 align-items: center;
                 overflow: hidden;
+                margin-left: 100px;
             }
 
             .landing-carousel-wrapper {
                 position: absolute;
-                left: 50px;
-                /* after left arrow */
-                right: 40px;
-                /* before right arrow */
+                left: 80px;
+                /* after left arrow + 30px extra gap */
+                right: 70px;
+                /* before right arrow + 30px extra gap */
                 top: 0;
                 bottom: 0;
                 overflow: hidden;
@@ -856,17 +858,17 @@
                 opacity: 1;
             }
 
-            /* Chevron positions — outside the carousel image area */
+            /* Chevron positions — centred in their respective gaps */
             .landing-chevron.chevron-left {
-                left: 12px;
+                left: 32px;
             }
 
-            /* within 50px left gap */
+            /* centred in 80px left gap */
             .landing-chevron.chevron-right {
-                right: 8px;
+                right: 32px;
             }
 
-            /* within 40px right margin */
+            /* centred in 70px right gap */
 
             /* Mobile */
             @media (max-width: 768px) {
