@@ -187,10 +187,10 @@
                 display: none !important;
             }
 
-            /* Mobile logo - top left corner - Box Logo BR.png at 42px */
+            /* Mobile logo - top left corner - Box Logo BR.png at 29px (70% of 42px) */
             .nav-logo {
                 display: block !important;
-                height: 42px;
+                height: 29px;
                 width: auto;
             }
 
@@ -455,7 +455,9 @@
             z-index: 9000;
             justify-content: center;
             align-items: center;
-            touch-action: pinch-zoom;
+            overflow: hidden;
+            touch-action: none;
+            /* JS handles all touch */
         }
 
         #gallery-lightbox.open {
@@ -466,7 +468,10 @@
             max-width: 95vw;
             max-height: 95vh;
             object-fit: contain;
-            touch-action: pinch-zoom;
+            transform-origin: center center;
+            touch-action: none;
+            will-change: transform;
+            transition: none;
         }
 
         #gallery-lightbox-close {
@@ -2270,15 +2275,76 @@
             const lightboxClose = document.getElementById('gallery-lightbox-close');
             if (!lightbox) return;
 
+            // --- pinch-zoom state ---
+            let scale = 1, lastScale = 1;
+            let startDist = 0;
+            let imgTx = 0, imgTy = 0; // pan offsets
+            let lastTx = 0, lastTy = 0;
+            let touchStartX = 0, touchStartY = 0;
+            let isPinching = false;
+
+            function setTransform() {
+                lightboxImg.style.transform = `translate(${imgTx}px, ${imgTy}px) scale(${scale})`;
+            }
+
+            function resetTransform() {
+                scale = 1; lastScale = 1;
+                imgTx = 0; imgTy = 0;
+                lastTx = 0; lastTy = 0;
+                lightboxImg.style.transform = '';
+            }
+
+            function dist(t) {
+                const dx = t[0].clientX - t[1].clientX;
+                const dy = t[0].clientY - t[1].clientY;
+                return Math.hypot(dx, dy);
+            }
+
+            lightboxImg.addEventListener('touchstart', (e) => {
+                if (e.touches.length === 2) {
+                    isPinching = true;
+                    startDist = dist(e.touches);
+                    lastScale = scale;
+                } else if (e.touches.length === 1) {
+                    isPinching = false;
+                    touchStartX = e.touches[0].clientX - imgTx;
+                    touchStartY = e.touches[0].clientY - imgTy;
+                }
+            }, { passive: true });
+
+            lightboxImg.addEventListener('touchmove', (e) => {
+                e.stopPropagation();
+                if (e.touches.length === 2) {
+                    isPinching = true;
+                    const newDist = dist(e.touches);
+                    scale = Math.min(4, Math.max(1, lastScale * (newDist / startDist)));
+                    setTransform();
+                } else if (e.touches.length === 1 && scale > 1) {
+                    imgTx = e.touches[0].clientX - touchStartX;
+                    imgTy = e.touches[0].clientY - touchStartY;
+                    setTransform();
+                }
+            }, { passive: true });
+
+            lightboxImg.addEventListener('touchend', () => {
+                lastScale = scale;
+                lastTx = imgTx;
+                lastTy = imgTy;
+                if (scale <= 1) resetTransform();
+                isPinching = false;
+            }, { passive: true });
+
             function openLightbox(src) {
                 if (window.innerWidth > 768) return; // desktop: no lightbox
                 lightboxImg.src = src;
+                resetTransform();
                 lightbox.classList.add('open');
             }
 
             function closeLightbox() {
                 lightbox.classList.remove('open');
                 lightboxImg.src = '';
+                resetTransform();
             }
 
             lightboxClose.addEventListener('click', closeLightbox);
