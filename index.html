@@ -30,8 +30,8 @@
             --accent: #1a1a1a;
             --text-primary: #1a1a1a;
             --text-secondary: rgba(26, 26, 26, 0.5);
-            --font-main: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-            --font-heading: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            --font-main: 'Baskerville Old Face', Baskerville, 'Times New Roman', Georgia, serif;
+            --font-heading: 'Baskerville Old Face', Baskerville, 'Times New Roman', Georgia, serif;
             --transition-speed: 0.6s;
             --transition-ease: cubic-bezier(0.2, 0, 0.2, 1);
         }
@@ -85,17 +85,6 @@
                 display: block;
                 height: 32px;
                 width: auto;
-            }
-
-            .nav-logo-box {
-                position: fixed;
-                top: 24px;
-                right: 24px;
-                height: 42px;
-                /* Increased from 32px by 131% */
-                width: auto;
-                z-index: 1100;
-                display: block;
             }
         }
 
@@ -414,11 +403,12 @@
         }
 
         .content-page h1 {
+            font-family: 'Baskerville Old Face', Baskerville, 'Times New Roman', serif;
             font-size: 0.75rem;
-            font-weight: 700;
-            margin-bottom: 2rem;
-            letter-spacing: 0.05em;
+            font-weight: 400;
+            letter-spacing: 0.12em;
             text-transform: uppercase;
+            margin-bottom: 2.5rem;
         }
 
         .content-page p {
@@ -845,8 +835,8 @@
                 position: absolute;
                 left: 80px;
                 /* after left arrow */
-                right: 12px;
-                /* symmetric visual gap on right */
+                right: 56px;
+                /* right: clear space for the right chevron (36px) + 20px gap */
                 top: 0;
                 bottom: 0;
                 overflow: hidden;
@@ -1047,7 +1037,6 @@
             <img src="Box Logo BR.png" alt="bonatelier" class="nav-logo-desktop">
         </a>
     </nav>
-    <img src="Text Logo BR.png" alt="logo" class="nav-logo-box">
 
     <!-- Desktop Menu -->
     <div class="menu">
@@ -2279,7 +2268,7 @@
 
             // Delegate tap on gallery images to open lightbox
             document.addEventListener('click', (e) => {
-                const img = e.target.closest('.viewer img, .vertical-track img');
+                const img = e.target.closest('.carousel-slide img');
                 if (img && window.innerWidth <= 768) {
                     openLightbox(img.src);
                 }
