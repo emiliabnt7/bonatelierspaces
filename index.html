@@ -419,21 +419,22 @@
         }
 
         .content-page h1 {
-            font-family: 'Baskerville Old Face', Baskerville, 'Times New Roman', serif;
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
             font-size: 0.75rem;
-            font-weight: 400;
+            font-weight: 700;
             letter-spacing: 0.12em;
             text-transform: uppercase;
             margin-bottom: 2.5rem;
+            color: var(--text-primary);
         }
 
         .content-page p {
             font-size: 0.65rem;
             font-weight: 300;
-            line-height: 1.7;
+            line-height: 1.8;
             max-width: 300px;
             margin-bottom: 1.5rem;
-            color: var(--text-secondary);
+            color: var(--text-primary);
         }
 
         /* Process two-column layout */
@@ -495,47 +496,60 @@
             z-index: 1;
         }
 
-        /* Team Grid for About page */
-        .team-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 3rem;
-            margin-top: 3rem;
+        /* ===== ABOUT PAGE LAYOUT ===== */
+        .about-block {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            width: fit-content;
+            max-width: 560px;
+            margin: 0 auto;
         }
 
-        .team-member {
-            text-align: left;
-        }
-
-        .team-member-photo {
+        .about-intro {
+            font-size: 0.65rem;
+            font-weight: 300;
+            line-height: 1.85;
+            color: #000;
+            text-align: justify;
             width: 100%;
-            aspect-ratio: 1;
+            margin-bottom: 2.5rem;
+        }
+
+        .about-person {
+            display: grid;
+            grid-template-columns: 220px 1fr;
+            gap: 28px;
+            width: 100%;
+            margin-bottom: 2.5rem;
+            align-items: start;
+        }
+
+        .about-person-photo {
+            width: 220px;
+            height: 220px;
             object-fit: cover;
-            margin-bottom: 1rem;
-            background: linear-gradient(135deg, #d0c9c3 0%, #b8b0a8 100%);
+            object-position: center top;
+            display: block;
+            flex-shrink: 0;
         }
 
-        .team-member-name {
-            font-family: Baskerville, 'Baskerville Old Face', 'Times New Roman', serif;
-            font-size: 0.85rem;
-            font-weight: 400;
-            margin-bottom: 0.25rem;
-        }
-
-        .team-member-role {
-            font-size: 0.7rem;
+        .about-person-bio {
+            font-size: 0.65rem;
             font-weight: 300;
-            color: var(--text-secondary);
-            margin-bottom: 0.5rem;
+            line-height: 1.85;
+            color: #000;
+            text-align: justify;
         }
 
-        .team-member-bio {
-            font-size: 0.7rem;
-            font-weight: 300;
-            line-height: 1.5;
-            color: var(--text-secondary);
+        .about-person-bio .person-name {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            font-weight: 500;
+            /* medium */
+            font-style: normal;
         }
 
+        /* Keep process-columns unchanged */
         /* ========================================
            MOBILE ADJUSTMENTS
            ======================================== */
@@ -1150,33 +1164,41 @@
         <div class="content-page">
             <h1><span class="translate" data-key="about">ABOUT</span></h1>
 
-            <p>Bonatelier was founded in 2023 in Delft, the Netherlands, where Augusta and Emilia met during their
-                common Master of Architecture. Bound by a shared interest in detail-oriented, slow architecture and a
-                desire to bring a more sensitive approach to the field, they created Bonatelier as a unifying platform
-                for projects across scales – from material research and furniture design to full-scale interior
-                projects.</p>
+            <div class="about-block">
 
-            <div class="team-grid">
-                <div class="team-member">
-                    <img src="assets/emilia.jpg" alt="Emilia" class="team-member-photo">
-                    <div class="team-member-bio translate" data-key="teamEmiliaBio">
-                        <strong>Emilia</strong> was born to a Lithuanian mother and a French father, and grew up between
+                <!-- Intro paragraph — full block width, justified -->
+                <p class="about-intro">Bonatelier was founded in 2023 in Delft, the Netherlands, where Augusta and
+                    Emilia
+                    met during their common Master of Architecture. Bound by a shared interest in detail-oriented, slow
+                    architecture and a desire to bring a more sensitive approach to the field, they created Bonatelier
+                    as
+                    a unifying platform for projects across scales – from material research and furniture design to
+                    full-scale interior projects.</p>
+
+                <!-- Emilia row: photo left | bio right -->
+                <div class="about-person">
+                    <img src="assets/Emilia square.png" alt="Emilia" class="about-person-photo">
+                    <p class="about-person-bio translate" data-key="teamEmiliaBio"><span
+                            class="person-name">Emilia</span> was born to a Lithuanian mother and a French father, and
+                        grew up between
                         Luxembourg, Belgium, Paris, and Vilnius before studying architecture in the Netherlands.
                         Experiencing different cultures and homes from an early age shaped her sensitivity to space,
                         identity, and belonging, and informs her approach to working with existing buildings and used
-                        materials to create personal interiors.
-                    </div>
+                        materials to create personal interiors.</p>
                 </div>
-                <div class="team-member">
-                    <img src="assets/augusta.jpg" alt="Augusta" class="team-member-photo">
-                    <div class="team-member-bio translate" data-key="teamAugustaBio">
-                        <strong>Augusta</strong> was born and raised in Vilnius and studied architecture in Wales before
-                        completing her Master’s in the Netherlands. Her academic and professional journey has taken her,
+
+                <!-- Augusta row: photo left | bio right -->
+                <div class="about-person">
+                    <img src="assets/Augusta square.png" alt="Augusta" class="about-person-photo">
+                    <p class="about-person-bio translate" data-key="teamAugustaBio"><span
+                            class="person-name">Augusta</span> was born and raised in Vilnius and studied architecture
+                        in Wales before
+                        completing her Master's in the Netherlands. Her academic and professional journey has taken her,
                         among others, to Denmark and Boston, USA. Her practice is rooted in material experimentation,
                         research, and a strong interest in cartography – exploring space across time, scale, and
-                        context.
-                    </div>
+                        context.</p>
                 </div>
+
             </div>
         </div>
     </main>
