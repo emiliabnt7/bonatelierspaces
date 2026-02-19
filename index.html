@@ -715,7 +715,6 @@
                 background: #200d0d;
                 display: flex;
                 align-items: center;
-                justify-content: center;
                 cursor: none !important;
                 transition: opacity 0.8s cubic-bezier(0.2, 0, 0.2, 1);
             }
@@ -725,43 +724,45 @@
                 pointer-events: none;
             }
 
-            /* Arrow zones */
-            .landing-arrow-zone {
-                position: absolute;
-                top: 0;
-                bottom: 0;
-                width: 12%;
-                z-index: 10;
+            /* Left info panel — ~30% width, empty zone */
+            .landing-info {
+                position: relative;
+                flex-shrink: 0;
+                width: 30%;
+                height: var(--carousel-h, 54vh);
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+                align-items: flex-start;
+                padding: 0 0 0 6vw;
+                z-index: 5;
+                pointer-events: none;
+            }
+
+            .landing-logo {
+                width: 130px;
+                filter: brightness(0) invert(1);
+                display: block;
+            }
+
+            .landing-tagline {
+                font-family: Baskerville, 'Baskerville Old Face', 'Times New Roman', serif;
+                font-size: 0.72rem;
+                color: rgba(255, 255, 255, 0.65);
+                line-height: 1.65;
+                font-weight: 400;
+            }
+
+            /* Right carousel area — ~70% width */
+            .landing-carousel-area {
+                position: relative;
+                flex: 1;
+                height: 100%;
                 display: flex;
                 align-items: center;
-                justify-content: center;
+                overflow: hidden;
             }
 
-            .landing-arrow-zone.left {
-                left: 0;
-            }
-
-            .landing-arrow-zone.right {
-                right: 0;
-            }
-
-            .landing-arrow {
-                color: rgba(255, 255, 255, 0.5);
-                font-size: 1.1rem;
-                font-family: 'Helvetica Neue', sans-serif;
-                font-weight: 300;
-                letter-spacing: 0.05em;
-                opacity: 0;
-                transition: opacity 0.3s ease;
-                pointer-events: none;
-                user-select: none;
-            }
-
-            .landing-arrow-zone:hover .landing-arrow {
-                opacity: 1;
-            }
-
-            /* Carousel */
             .landing-carousel-wrapper {
                 position: absolute;
                 left: 0;
@@ -775,18 +776,17 @@
 
             .landing-carousel-track {
                 display: flex;
-                gap: 12px;
-                transition: transform 0.6s cubic-bezier(0.2, 0, 0.2, 1);
+                gap: 10px;
                 will-change: transform;
-                padding: 0 2vw;
+                padding-left: 40px;
+                /* space for left arrow */
             }
 
             .landing-carousel-item {
                 flex-shrink: 0;
-                height: 54vh;
+                height: var(--carousel-h, 54vh);
                 width: auto;
                 overflow: hidden;
-                border-radius: 1px;
             }
 
             .landing-carousel-item img {
@@ -796,89 +796,124 @@
                 object-fit: cover;
                 pointer-events: none;
                 user-select: none;
-                filter: brightness(0.92);
+                filter: brightness(0.9);
             }
 
-            /* Right panel: logo + tagline */
-            .landing-info {
+            /* V-shaped chevron arrows flanking the carousel */
+            .landing-chevron {
                 position: absolute;
-                right: 4vw;
                 top: 50%;
                 transform: translateY(-50%);
+                z-index: 20;
+                width: 36px;
+                height: 36px;
                 display: flex;
-                flex-direction: column;
-                align-items: flex-start;
-                z-index: 5;
-                pointer-events: none;
-                width: 160px;
+                align-items: center;
+                justify-content: center;
+                opacity: 0;
+                transition: opacity 0.3s ease;
+                cursor: none;
             }
 
-            .landing-logo {
-                width: 140px;
-                margin-bottom: 1.4rem;
-                filter: brightness(0) invert(1);
+            .landing-chevron svg {
+                width: 14px;
+                height: 24px;
+                stroke: rgba(255, 255, 255, 0.7);
+                stroke-width: 1;
+                fill: none;
+                stroke-linecap: round;
+                stroke-linejoin: round;
             }
 
-            .landing-divider {
-                width: 100%;
-                height: 1px;
-                background: rgba(255, 255, 255, 0.35);
-                margin-bottom: 1rem;
+            /* Hover zones — thin vertical bands */
+            .landing-arrow-zone {
+                position: absolute;
+                top: 0;
+                bottom: 0;
+                width: 50px;
+                z-index: 21;
+                display: flex;
+                align-items: center;
+                justify-content: center;
             }
 
-            .landing-tagline {
-                font-family: Baskerville, 'Baskerville Old Face', 'Times New Roman', serif;
-                font-size: 0.72rem;
-                color: rgba(255, 255, 255, 0.7);
-                line-height: 1.6;
-                font-weight: 400;
+            .landing-arrow-zone.left {
+                left: 0;
             }
 
-            /* Mobile adjustments */
+            .landing-arrow-zone.right {
+                right: 0;
+            }
+
+            .landing-arrow-zone:hover+.landing-chevron,
+            .landing-arrow-zone:hover~.landing-chevron,
+            .landing-arrow-zone.hovered .landing-chevron {
+                opacity: 1;
+            }
+
+            /* Trigger chevron visibility on zone hover via JS */
+            .landing-chevron.visible {
+                opacity: 1;
+            }
+
+            .landing-chevron.chevron-left {
+                left: 6px;
+            }
+
+            .landing-chevron.chevron-right {
+                right: 6px;
+            }
+
+            /* Mobile */
             @media (max-width: 768px) {
-                .landing-carousel-item {
-                    height: 40vh;
-                }
-
                 .landing-info {
-                    right: 3vw;
-                    width: 120px;
+                    width: 35%;
+                    padding-left: 4vw;
                 }
 
                 .landing-logo {
-                    width: 110px;
+                    width: 100px;
                 }
 
                 .landing-tagline {
-                    font-size: 0.62rem;
+                    font-size: 0.6rem;
                 }
 
-                .landing-arrow-zone {
-                    width: 16%;
+                :root {
+                    --carousel-h: 38vh;
                 }
             }
         </style>
 
-        <!-- Left arrow zone -->
-        <div class="landing-arrow-zone left" id="landingArrowLeft">
-            <span class="landing-arrow">←</span>
-        </div>
-
-        <!-- Carousel -->
-        <div class="landing-carousel-wrapper" id="landingCarouselWrapper">
-            <div class="landing-carousel-track" id="landingCarouselTrack"></div>
-        </div>
-
-        <!-- Right panel -->
-        <div class="landing-info">
+        <!-- Left info panel -->
+        <div class="landing-info" id="landingInfo">
             <img src="Text Logo BR.png" alt="bonatelier" class="landing-logo">
-            <div class="landing-divider"></div>
             <div class="landing-tagline">Architecture and design studio,<br>based in Vilnius, Lithuania.</div>
         </div>
 
-        <!-- Right arrow zone -->
-        <div class="landing-arrow-zone right" id="landingArrowRight">
-            <span class="landing-arrow">→</span>
+        <!-- Right: carousel + arrows -->
+        <div class="landing-carousel-area" id="landingCarouselArea">
+
+            <!-- Left arrow zone + chevron -->
+            <div class="landing-arrow-zone left" id="landingArrowLeft"></div>
+            <div class="landing-chevron chevron-left" id="landingChevronLeft">
+                <svg viewBox="0 0 10 20">
+                    <polyline points="8,1 2,10 8,19" />
+                </svg>
+            </div>
+
+            <!-- Carousel -->
+            <div class="landing-carousel-wrapper" id="landingCarouselWrapper">
+                <div class="landing-carousel-track" id="landingCarouselTrack"></div>
+            </div>
+
+            <!-- Right arrow zone + chevron -->
+            <div class="landing-chevron chevron-right" id="landingChevronRight">
+                <svg viewBox="0 0 10 20">
+                    <polyline points="2,1 8,10 2,19" />
+                </svg>
+            </div>
+            <div class="landing-arrow-zone right" id="landingArrowRight"></div>
         </div>
     </div>
 
@@ -1925,19 +1960,28 @@
             const track = document.getElementById('landingCarouselTrack');
             const arrowLeft = document.getElementById('landingArrowLeft');
             const arrowRight = document.getElementById('landingArrowRight');
+            const chevLeft = document.getElementById('landingChevronLeft');
+            const chevRight = document.getElementById('landingChevronRight');
 
             if (!landingEl || !track) return;
 
-            // Collect all images from all projects (in order)
+            // Excluded images (plan screenshots)
+            const EXCLUDED = [
+                'Screenshot 2026-01-04 at 12.15.49.png'
+            ];
+
+            // Collect all images from all projects, excluding plan images
             const allImages = [];
             projects.forEach(proj => {
                 proj.images.forEach(img => {
-                    allImages.push(`gallery/${proj.folder}/${img}`);
+                    if (!EXCLUDED.some(excl => img.includes(excl))) {
+                        allImages.push(`gallery/${proj.folder}/${img}`);
+                    }
                 });
             });
 
             // Build carousel items (duplicate for seamless loop)
-            const imageSet = [...allImages, ...allImages]; // double for looping
+            const imageSet = [...allImages, ...allImages];
             imageSet.forEach(src => {
                 const item = document.createElement('div');
                 item.className = 'landing-carousel-item';
@@ -1948,58 +1992,67 @@
                 track.appendChild(item);
             });
 
+            // Set carousel height via CSS var (54vh default)
+            document.documentElement.style.setProperty('--carousel-h', '54vh');
+
             // Carousel state
             let offset = 0;
-            let itemWidth = 0;
-            let totalOrigWidth = 0;
             let autoScrollInterval = null;
             let isHoveringArrow = false;
-            let hoverDirection = 0;
             let hoverInterval = null;
             let isEntering = false;
 
             function getItemWidth() {
                 const first = track.querySelector('.landing-carousel-item');
                 if (!first) return 200;
-                return first.offsetWidth + 12; // 12 = gap
+                return first.offsetWidth + 10; // gap = 10px
             }
 
-            function setOffset(val, animate) {
-                // Seamless loop: reset when past halfway
+            function setOffset(val) {
                 const half = allImages.length * getItemWidth();
                 if (val >= half) val -= half;
                 if (val <= -half) val += half;
                 offset = val;
-                track.style.transition = animate ? 'transform 0.6s cubic-bezier(0.2,0,0.2,1)' : 'none';
                 track.style.transform = `translateX(${-offset}px)`;
             }
 
-            // Auto-scroll (slow drift right)
+            // Auto-scroll
             function startAutoScroll() {
                 autoScrollInterval = setInterval(() => {
-                    if (!isHoveringArrow) setOffset(offset + 0.4, false);
+                    if (!isHoveringArrow) setOffset(offset + 0.5);
                 }, 16);
             }
 
-            // Arrow hover: faster scroll in that direction
+            // Arrow hover scroll
             function startHoverScroll(dir) {
                 isHoveringArrow = true;
-                hoverDirection = dir;
                 hoverInterval = setInterval(() => {
-                    setOffset(offset + dir * 3.5, false);
+                    setOffset(offset + dir * 4);
                 }, 16);
             }
 
             function stopHoverScroll() {
                 isHoveringArrow = false;
                 clearInterval(hoverInterval);
-                hoverInterval = null;
             }
 
-            arrowLeft.addEventListener('mouseenter', () => startHoverScroll(-1));
-            arrowLeft.addEventListener('mouseleave', stopHoverScroll);
-            arrowRight.addEventListener('mouseenter', () => startHoverScroll(1));
-            arrowRight.addEventListener('mouseleave', stopHoverScroll);
+            // Arrow zones control scroll and chevron visibility
+            arrowLeft.addEventListener('mouseenter', () => {
+                chevLeft.classList.add('visible');
+                startHoverScroll(-1);
+            });
+            arrowLeft.addEventListener('mouseleave', () => {
+                chevLeft.classList.remove('visible');
+                stopHoverScroll();
+            });
+            arrowRight.addEventListener('mouseenter', () => {
+                chevRight.classList.add('visible');
+                startHoverScroll(1);
+            });
+            arrowRight.addEventListener('mouseleave', () => {
+                chevRight.classList.remove('visible');
+                stopHoverScroll();
+            });
 
             // Enter site on click anywhere
             function enterSite() {
@@ -2008,30 +2061,20 @@
                 clearInterval(autoScrollInterval);
                 clearInterval(hoverInterval);
                 landingEl.classList.add('hidden');
-                // Navigate to gallery
                 window.location.hash = '#gallery';
-                setTimeout(() => {
-                    landingEl.style.display = 'none';
-                }, 900);
+                setTimeout(() => { landingEl.style.display = 'none'; }, 900);
             }
 
             landingEl.addEventListener('click', enterSite);
-
-            // Also enter on any key press
-            document.addEventListener('keydown', function onKey(e) {
+            document.addEventListener('keydown', function onKey() {
                 document.removeEventListener('keydown', onKey);
                 enterSite();
             });
 
-            // Init after images can load
-            setTimeout(() => {
-                itemWidth = getItemWidth();
-                // Start offset in middle to allow looping both ways
-                offset = 0;
-                track.style.transition = 'none';
-                track.style.transform = `translateX(0)`;
-                startAutoScroll();
-            }, 100);
+            // Init
+            track.style.transition = 'none';
+            track.style.transform = 'translateX(0)';
+            setTimeout(startAutoScroll, 150);
         })();
 
         // Initialize Router
