@@ -4,9 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>bonatellierspaces | Architecture Studio</title>
-    <meta name="description" id="metaDescription"
-        content="bonatellierspaces - A contemporary architecture studio crafting spaces that inspire.">
+    <title>Bonatelier | Architecture and design studio</title>
+    <meta name="description" id="metaDescription" content="Vilnius-based interior design and architecture">
 
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="Box Logo BR.png">
@@ -458,8 +457,12 @@
            CONTENT PAGES (About, Process, Context)
            ======================================== */
         .content-page {
-            padding: 200px 200px 60px 320px;
-            /* Increased top padding from 100px to 200px */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 60px 44px;
+            /* Balanced horizontal padding */
             overflow-y: auto;
             height: 100%;
         }
@@ -712,6 +715,8 @@
             }
 
             .content-page {
+                display: block;
+                /* Revert flex centering for mobile */
                 padding: 60px 24px 40px 24px;
             }
 
