@@ -427,7 +427,8 @@
         .scroll-vertical,
         .scroll-vertical-down {
             position: fixed;
-            left: 80px;
+            left: 245px;
+            /* Updated from 80px */
             z-index: 1001;
             display: flex;
             align-items: center;
@@ -1990,10 +1991,8 @@
                     imageCounter.style.transform = 'none';
 
                     // Horizontal scroll indicator (Swipe for images) - Centered at bottom
-                    // Position it just above the image bottom or closer to it
-                    const gap = 30; // Closer than the previous 60px
-                    scrollHorizontal.style.bottom = `${viewportHeight - imageBottom - gap}px`;
-                    scrollHorizontal.style.left = '50%';
+                    scrollHorizontal.style.bottom = '63.5px';
+                    scrollHorizontal.style.left = '15%';
                     scrollHorizontal.style.transform = 'translateX(calc(-50% + 350px))';
 
                     // Vertical Indicator — let CSS rule handle position
