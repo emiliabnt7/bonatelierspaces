@@ -780,6 +780,12 @@
                 width: 12px;
                 height: 22px;
             }
+
+            /* Match horizontal arrows to vertical size on mobile */
+            .scroll-horizontal svg {
+                width: 12px;
+                height: 22px;
+            }
         }
 
 
@@ -789,7 +795,8 @@
             position: fixed;
             top: 24px;
             right: 24px;
-            z-index: 1001;
+            z-index: 1200;
+            /* above mobile-nav overlay (1100) so × stays visible */
             background: none;
             border: none;
             width: 24px;
