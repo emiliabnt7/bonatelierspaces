@@ -1971,13 +1971,10 @@
                     const spacing = 40;
 
                     // Project Info - Closer to image, but safe from credits
-                    projectInfo.style.left = `${imageRight + 30}px`;
-                    projectInfo.style.right = 'auto';
-                    projectInfo.style.transform = 'none';
-                    // Ensure it doesn't overlap with credits (bottom: 24px)
+                    // Project Info - Closer to image, but safe from credits
                     const infoTop = Math.min(imageBottom - 100, viewportHeight - 150) + 12;
-                    projectInfo.style.top = `${infoTop}px`;
-                    projectInfo.style.bottom = 'auto';
+                    projectInfo.style.inset = `${infoTop}px auto auto ${imageRight + 30}px`;
+                    projectInfo.style.transform = 'none';
                     projectInfo.style.textAlign = 'left';
 
                     // Description Overlay - Centered vertically with image
