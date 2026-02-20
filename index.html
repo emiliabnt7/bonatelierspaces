@@ -404,8 +404,8 @@
 
         .scroll-vertical svg,
         .scroll-vertical-down svg {
-            width: 12px;
-            height: 7px;
+            width: 22px;
+            height: 12px;
             /* landscape viewBox: wider than tall */
             stroke: var(--text-primary);
             stroke-width: 1;
@@ -423,7 +423,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            opacity: 0.4;
+            opacity: 0.5;
             pointer-events: auto;
             cursor: pointer;
             transition: opacity 0.2s;
@@ -770,18 +770,20 @@
                 margin: 0;
             }
 
-            /* Mobile gallery nav arrows: up-left, down-right */
+            /* Mobile gallery nav arrows: up-left, down-right — 30px closer */
             .scroll-vertical {
-                left: 20px;
+                left: 50px;
                 top: 50%;
                 transform: translateY(-50%);
+                opacity: 0.5;
             }
 
             .scroll-vertical-down {
                 left: auto;
-                right: 20px;
+                right: 50px;
                 top: 50%;
                 transform: translateY(-50%);
+                opacity: 0.5;
             }
 
             /* Up/down arrows: landscape viewBox so swap w/h */
