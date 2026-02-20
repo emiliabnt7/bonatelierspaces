@@ -1971,23 +1971,18 @@
                     const logoWidth = 32;
                     const spacing = 40;
 
-                    // Project Info - Closer to image, but safe from credits
-                    // Project Info - Closer to image, but safe from credits
-                    const infoTop = Math.min(imageBottom - 100, viewportHeight - 150) + 12;
-                    projectInfo.style.inset = `${infoTop}px auto auto ${imageRight + 30}px`;
+                    // Project Info - Bottom aligned with image bottom
+                    const bottomOffset = viewportHeight - imageBottom;
+                    projectInfo.style.inset = `auto auto ${bottomOffset}px ${imageRight + 30}px`;
                     projectInfo.style.transform = 'none';
                     projectInfo.style.textAlign = 'left';
-
                     // Description Overlay - Centered vertically with image
                     projectDescriptionOverlay.style.left = `${imageRight + 30}px`;
                     projectDescriptionOverlay.style.top = `${imageCenterY}px`;
                     projectDescriptionOverlay.style.transform = 'translateY(-50%)';
 
                     // Counter - Aligned with "More information"
-                    imageCounter.style.left = 'auto';
-                    imageCounter.style.right = `${rightPadding}px`;
-                    imageCounter.style.top = `${infoTop + 74}px`; // Match More information baseline (adjusted +22px)
-                    imageCounter.style.bottom = 'auto';
+                    imageCounter.style.inset = `auto ${rightPadding}px ${bottomOffset}px auto`;
                     imageCounter.style.transform = 'none';
 
                     // Horizontal scroll indicator (Swipe for images) - Centered at bottom
