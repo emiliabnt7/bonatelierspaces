@@ -393,8 +393,8 @@
             z-index: 1000;
             display: flex;
             align-items: center;
-            gap: 112px;
-            /* 82 + 30 */
+            gap: 107px;
+            /* Reduced by 5px from 112px */
             opacity: 0.2;
             pointer-events: none;
         }
@@ -460,9 +460,10 @@
             display: flex;
             flex-direction: column;
             justify-content: center;
-            align-items: center;
-            padding: 60px 44px;
-            /* Balanced horizontal padding */
+            align-items: flex-start;
+            /* Left aligned with gallery */
+            padding: 60px 44px 60px 20%;
+            /* 20% left padding to match gallery gutter */
             overflow-y: auto;
             height: 100%;
         }
@@ -492,7 +493,8 @@
         /* Process single column layout */
         .process-block {
             max-width: 460px;
-            margin: 0 auto;
+            margin: 0;
+            /* Remove auto-centering */
             text-align: justify;
             display: flex;
             flex-direction: column;
@@ -582,7 +584,8 @@
             align-items: flex-start;
             width: fit-content;
             max-width: 460px;
-            margin: 0 auto;
+            margin: 0;
+            /* Remove auto-centering */
         }
 
         .about-intro {
@@ -600,7 +603,8 @@
         .about-person {
             display: grid;
             grid-template-columns: 165px 1fr;
-            gap: 28px;
+            gap: 13px;
+            /* Reduced from 28px by 15px */
             width: 100%;
             margin-bottom: 2.5rem;
             align-items: start;
@@ -640,8 +644,8 @@
             display: flex;
             flex-direction: column;
             max-width: 460px;
-            /* matches about/process width */
-            margin: 0 auto;
+            margin: 0;
+            /* Remove auto-centering */
             color: #000;
         }
 
