@@ -371,11 +371,9 @@
             display: none !important;
         }
 
-        body.on-gallery .scroll-horizontal {
-            display: flex !important;
-        }
-
-        body.on-gallery .scroll-vertical {
+        body.on-gallery .scroll-horizontal,
+        body.on-gallery .scroll-vertical,
+        body.on-gallery .scroll-vertical-down {
             display: flex !important;
         }
 
@@ -395,7 +393,8 @@
         }
 
         .scroll-horizontal svg,
-        .scroll-vertical svg {
+        .scroll-vertical svg,
+        .scroll-vertical-down svg {
             width: 7px;
             height: 12px;
             stroke: var(--text-primary);
@@ -405,20 +404,34 @@
             stroke-linejoin: round;
         }
 
-        /* Vertical navigation hint — two V chevrons left of gallery images */
-        .scroll-vertical {
+        /* Gallery nav arrows — up above, down below, left of image on desktop */
+        .scroll-vertical,
+        .scroll-vertical-down {
             position: fixed;
-            left: 780px;
-            /* 430 + 350 */
-            top: 50%;
-            transform: translateY(-50%);
-            z-index: 1000;
+            left: 80px;
+            z-index: 1001;
             display: flex;
-            flex-direction: column;
             align-items: center;
-            gap: 102px;
+            justify-content: center;
             opacity: 0.4;
-            pointer-events: none;
+            pointer-events: auto;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+
+        .scroll-vertical {
+            top: calc(50% - 40px);
+            transform: translateY(-50%);
+        }
+
+        .scroll-vertical-down {
+            top: calc(50% + 40px);
+            transform: translateY(-50%);
+        }
+
+        .scroll-vertical:hover,
+        .scroll-vertical-down:hover {
+            opacity: 0.9;
         }
 
         /* ========================================
@@ -722,7 +735,7 @@
                 aspect-ratio: 1;
             }
 
-            /* Uniform justified text on mobile */
+            /* Uniform justified text on mobile, 120% body font size */
             .content-page p,
             .about-intro,
             .about-person-bio,
@@ -730,16 +743,34 @@
             .contact-block p {
                 text-align: justify;
                 max-width: 100%;
+                font-size: 0.78rem;
+                /* 120% of 0.65rem */
             }
 
             .process-block {
                 max-width: 100%;
                 width: 100%;
+                margin: 0;
             }
 
             .contact-block {
                 max-width: 100%;
                 width: 100%;
+                margin: 0;
+            }
+
+            /* Mobile gallery nav arrows: up-left, down-right */
+            .scroll-vertical {
+                left: 20px;
+                top: 50%;
+                transform: translateY(-50%);
+            }
+
+            .scroll-vertical-down {
+                left: auto;
+                right: 20px;
+                top: 50%;
+                transform: translateY(-50%);
             }
 
         }
@@ -1053,18 +1084,18 @@
                 stroke-linejoin: round;
             }
 
-            /* Hover zones — thin vertical bands — always interactive */
+            /* Hover zones — wide interactive bands */
             .landing-arrow-zone {
                 position: absolute;
                 top: 0;
                 bottom: 0;
-                width: 50px;
+                width: 120px;
+                /* wider hover zone */
                 z-index: 21;
                 display: flex;
                 align-items: center;
                 justify-content: center;
                 pointer-events: all;
-                /* override parent landing-info pointer-events:none */
                 cursor: default;
             }
 
@@ -1269,10 +1300,14 @@
             <polyline points="2,1 8,9 2,17" />
         </svg>
     </div>
+    <!-- Up arrow: navigate to previous project -->
     <div class="scroll-indicator scroll-vertical" id="scrollVertical">
         <svg viewBox="0 0 10 18">
             <polyline points="2,14 5,4 8,14" />
         </svg>
+    </div>
+    <!-- Down arrow: navigate to next project -->
+    <div class="scroll-indicator scroll-vertical-down" id="scrollVerticalDown">
         <svg viewBox="0 0 10 18">
             <polyline points="2,4 5,14 8,4" />
         </svg>
@@ -1918,19 +1953,39 @@
                     scrollHorizontal.style.left = '50%';
                     scrollHorizontal.style.transform = 'translateX(-50%)';
 
-                    // Vertical Indicator
-                    // Ensure it stays fixed via reset of JS overrides if any
+                    // Vertical Indicator — let CSS rule handle position
                     scrollVertical.style.right = '';
                     scrollVertical.style.bottom = '';
                     scrollVertical.style.left = '';
                     scrollVertical.style.top = '';
                     scrollVertical.style.transform = '';
+                    if (scrollVerticalDown) {
+                        scrollVerticalDown.style.right = '';
+                        scrollVerticalDown.style.bottom = '';
+                        scrollVerticalDown.style.left = '';
+                        scrollVerticalDown.style.top = '';
+                        scrollVerticalDown.style.transform = '';
+                    }
                 }
             }, 100);
         }
 
         function setupGalleryEventListeners() {
             const galleryPage = document.getElementById('page-gallery');
+
+            // Project navigation arrows (up/down)
+            function navigateProjectArrow(dir) {
+                if (!galleryPage.classList.contains('active')) return;
+                if (dir < 0 && currentProjectIndex > 0) currentProjectIndex--;
+                else if (dir > 0 && currentProjectIndex < projects.length - 1) currentProjectIndex++;
+                else return;
+                projectInfo.classList.add('transitioning');
+                updatePositions(true);
+                updateGalleryHash();
+                setTimeout(() => { updateProjectInfo(); projectInfo.classList.remove('transitioning'); positionProjectInfo(); }, 200);
+            }
+            scrollVertical.addEventListener('click', () => navigateProjectArrow(-1));
+            if (scrollVerticalDown) scrollVerticalDown.addEventListener('click', () => navigateProjectArrow(1));
 
             galleryPage.addEventListener('mousedown', handleDragStart);
             document.addEventListener('mousemove', handleDragMove);
@@ -2331,8 +2386,13 @@
                 track.style.transform = `translateX(${-offset}px)`;
             }
 
-            // Auto-scroll disabled — carousel is static, arrow hover only
-            function startAutoScroll() { /* no-op */ }
+            // Auto-scroll disabled on desktop; enabled on mobile
+            function startAutoScroll() {
+                if (window.innerWidth > 768) return;
+                autoScrollInterval = setInterval(() => {
+                    if (!isHoveringArrow) setOffset(offset + 0.5);
+                }, 16);
+            }
 
             // Arrow hover scroll
             function startHoverScroll(dir) {
