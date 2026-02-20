@@ -908,6 +908,32 @@
             visibility: visible;
         }
 
+        .mobile-language-switcher {
+            position: absolute;
+            bottom: 60px;
+            display: flex;
+            gap: 20px;
+            z-index: 1101;
+        }
+
+        .mobile-language-switcher a {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            font-size: 0.8125rem;
+            /* Scaled to match desktop nav */
+            font-weight: 300;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--text-secondary);
+            transition: color 0.2s;
+            margin: 0 !important;
+            /* Reset nav margin */
+        }
+
+        .mobile-language-switcher a.active {
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+
         .mobile-nav a {
             font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
             font-size: 0.75rem;
@@ -1315,6 +1341,13 @@
         <a href="#about" data-page="about" class="translate" data-key="about">About</a>
         <a href="#process" data-page="process" class="translate" data-key="process">Process</a>
         <a href="#contacts" data-page="contacts" class="translate" data-key="contacts">Contacts</a>
+
+        <!-- Mobile Language Switcher (Bottom) -->
+        <div class="mobile-language-switcher">
+            <a href="#" class="active" onclick="setLanguage(event, 'EN')">EN</a>
+            <a href="#" onclick="setLanguage(event, 'LT')">LT</a>
+            <a href="#" onclick="setLanguage(event, 'FR')">FR</a>
+        </div>
     </div>
 
     <!-- Language Switcher -->
@@ -2334,8 +2367,8 @@
                 }
             });
 
-            // Update language switcher active state
-            const links = document.querySelectorAll('.language-switcher a');
+            // Update language switcher active state (both desktop and mobile)
+            const links = document.querySelectorAll('.language-switcher a, .mobile-language-switcher a');
             links.forEach(link => {
                 if (link.innerText === lang) {
                     link.classList.add('active');
