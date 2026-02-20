@@ -392,11 +392,21 @@
             pointer-events: none;
         }
 
-        .scroll-horizontal svg,
-        .scroll-vertical svg,
-        .scroll-vertical-down svg {
+        .scroll-horizontal svg {
             width: 7px;
             height: 12px;
+            stroke: var(--text-primary);
+            stroke-width: 1;
+            fill: none;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .scroll-vertical svg,
+        .scroll-vertical-down svg {
+            width: 12px;
+            height: 7px;
+            /* landscape viewBox: wider than tall */
             stroke: var(--text-primary);
             stroke-width: 1;
             fill: none;
@@ -774,14 +784,14 @@
                 transform: translateY(-50%);
             }
 
-            /* Up/down arrows: widen to match height of left/right arrows (12px) */
+            /* Up/down arrows: landscape viewBox so swap w/h */
             .scroll-vertical svg,
             .scroll-vertical-down svg {
-                width: 12px;
-                height: 22px;
+                width: 22px;
+                height: 12px;
             }
 
-            /* Match horizontal arrows to vertical size on mobile */
+            /* Horizontal arrows: portrait, same visual size */
             .scroll-horizontal svg {
                 width: 12px;
                 height: 22px;
@@ -1317,14 +1327,14 @@
     </div>
     <!-- Up arrow: navigate to previous project -->
     <div class="scroll-indicator scroll-vertical" id="scrollVertical">
-        <svg viewBox="0 0 10 18">
-            <polyline points="2,14 5,4 8,14" />
+        <svg viewBox="0 0 18 10">
+            <polyline points="4,8 9,2 14,8" />
         </svg>
     </div>
     <!-- Down arrow: navigate to next project -->
     <div class="scroll-indicator scroll-vertical-down" id="scrollVerticalDown">
-        <svg viewBox="0 0 10 18">
-            <polyline points="2,4 5,14 8,4" />
+        <svg viewBox="0 0 18 10">
+            <polyline points="4,2 9,8 14,2" />
         </svg>
     </div>
 
