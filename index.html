@@ -471,7 +471,8 @@
             font-weight: 700;
             letter-spacing: 0.12em;
             text-transform: uppercase;
-            margin-bottom: 2.5rem;
+            margin-bottom: calc(2.5rem - 10px);
+            /* 10px closer to body */
             color: var(--text-primary);
         }
 
@@ -511,7 +512,8 @@
             font-weight: 700;
             letter-spacing: 0.12em;
             text-transform: uppercase;
-            margin-bottom: 2.5rem;
+            margin-bottom: calc(2.5rem - 10px);
+            /* 10px closer to body */
             color: var(--text-primary);
             text-align: left;
             /* Keep title left aligned relative to block */
@@ -647,7 +649,8 @@
             font-weight: 700;
             letter-spacing: 0.12em;
             text-transform: uppercase;
-            margin-bottom: 2.5rem;
+            margin-bottom: calc(2.5rem - 10px);
+            /* 10px closer to body */
             color: var(--text-primary);
             text-align: left;
         }
@@ -1987,21 +1990,20 @@
 
                     // Horizontal scroll indicator (Swipe for images) - Centered at bottom
                     scrollHorizontal.style.bottom = '63.5px';
-                    scrollHorizontal.style.left = '15%';
-                    scrollHorizontal.style.transform = 'translateX(calc(-50% + 350px))';
+                    scrollHorizontal.style.left = '50%';
+                    scrollHorizontal.style.transform = 'translateX(-50%)';
 
-                    // Vertical Indicator — let CSS rule handle position
-                    scrollVertical.style.right = '';
-                    scrollVertical.style.bottom = '';
-                    scrollVertical.style.left = '';
-                    scrollVertical.style.top = '';
-                    scrollVertical.style.transform = '';
+                    // Vertical Indicators - 20px right of image
+                    scrollVertical.style.left = `${imageRight + 20}px`;
                     if (scrollVerticalDown) {
-                        scrollVerticalDown.style.right = '';
-                        scrollVerticalDown.style.bottom = '';
-                        scrollVerticalDown.style.left = '';
-                        scrollVerticalDown.style.top = '';
-                        scrollVerticalDown.style.transform = '';
+                        scrollVerticalDown.style.left = `${imageRight + 20}px`;
+                    }
+
+                    // Menu - Centered vertically across image
+                    const menu = document.querySelector('.menu');
+                    if (menu) {
+                        menu.style.top = `${viewportHeight / 2}px`;
+                        menu.style.transform = 'translateY(-50%)';
                     }
                 }
             }, 100);
